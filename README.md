@@ -37,26 +37,53 @@ An interactive data visualization dashboard for monitoring adolescent sexual and
 
 ## Data
 
-The dashboard includes data for **75 countries** across 10 key indicators:
+The dashboard includes data for **75 countries** across **10 key indicators**.
 
-| Indicator | Description |
-|-----------|-------------|
-| Adolescent Birth Rate (15-19) | Births per 1,000 women aged 15-19 |
-| Adolescent Birth Rate (10-14) | Births per 1,000 girls aged 10-14 |
-| Contraceptive Prevalence | % of women 15-49 using modern methods |
-| Unmet Need for FP | % of women with unmet family planning need |
-| HIV Prevalence | % of women aged 15-24 living with HIV |
-| Sex Ed Coverage | % of schools with comprehensive sexuality education |
-| Child Marriage | % of women 20-24 married before age 18 |
-| Maternal Mortality | Maternal deaths per 100,000 live births |
+### Data Collection Process
+
+Indicator values were collected from the following authoritative sources and compiled into a structured JavaScript dataset embedded within the dashboard:
+
+| Indicator | Primary Source | Year |
+|-----------|----------------|------|
+| Adolescent Birth Rate (15-19) | WHO Global Health Observatory | 2015–2022 |
+| Adolescent Birth Rate (10-14) | UNFPA State of World Population | 2020–2022 |
+| Contraceptive Prevalence | WHO / DHS Program | 2015–2022 |
+| Unmet Need for Family Planning | WHO Global Health Observatory | 2015–2022 |
+| HIV Prevalence (women 15-24) | UNAIDS | 2022 |
+| Comprehensive Sexuality Education | UNESCO / UNFPA | 2021 |
+| Child Marriage (married before 18) | UNICEF / UNFPA | 2022 |
+| Maternal Mortality Ratio | WHO / World Bank | 2020 |
 
 **Data Sources:**
 - [WHO Global Health Observatory](https://www.who.int/data/gho)
 - [UNFPA State of World Population](https://www.unfpa.org/swp)
 - [UNAIDS Data](https://data.unaids.org/)
 - [World Bank Open Data](https://data.worldbank.org/)
+- [UNICEF Data](https://data.unicef.org/)
 
-Values are estimates based on the most recent available data (2015-2022) and are intended for informational and educational purposes.
+Values represent the most recent available estimates and are intended for **informational and educational purposes**.
+
+---
+
+## Tech Stack & Tools
+
+This dashboard is built entirely with **frontend web technologies** — no Python backend, no build tools, zero dependencies to install.
+
+| Component | Tool / Library | Purpose |
+|-----------|---------------|---------|
+| **Charts & Maps** | [Plotly.js](https://plotly.com/javascript/) | Interactive choropleth maps, line charts, bar charts, scatter plots, and radar charts |
+| **Icons** | [Lucide](https://lucide.dev/) | Consistent, lightweight SVG iconography |
+| **Typography** | [Google Fonts — Inter](https://fonts.google.com/specimen/Inter) | Modern, readable UI typography |
+| **Styling** | Vanilla CSS (CSS Variables, Flexbox, Grid, Animations) | Responsive layout, hover effects, scroll animations |
+| **Interactivity** | Vanilla JavaScript (ES6+) | Data filtering, search, chart updates, export functionality |
+| **Hosting** | [GitHub Pages](https://pages.github.com/) | Free, automatic deployment from Git repository |
+
+### Why no build tools?
+
+Keeping everything in a single `dashboard.html` file makes the project:
+- **Instantly deployable** to any static host (GitHub Pages, Netlify, Vercel)
+- **Easy to understand** — no webpack config, no npm install, no build step
+- **Fast to load** — all assets are either inline or from reliable CDNs
 
 ---
 
@@ -79,24 +106,16 @@ Or simply visit the [live demo](https://haijunche.github.io/unfpa-cse-dashboard/
 
 ---
 
-## Tech Stack
-
-- **Plotly.js** — Interactive charts and maps
-- **Lucide Icons** — Clean, consistent iconography
-- **Google Fonts (Inter)** — Modern typography
-- **Vanilla HTML/CSS/JS** — No build tools, no dependencies to install
-
----
-
 ## Project Structure
 
 ```
 unfpa-cse-dashboard/
-├── dashboard.html    # Complete single-file dashboard (all code inline)
-└── README.md         # This file
+├── dashboard.html    # Complete single-file dashboard (~1,500 lines)
+│                     # — data, styles, and JS all inline
+├── README.md         # Project documentation
+├── LICENSE           # MIT License + data usage note
+└── RESUME_DESCRIPTION.md  # Resume copy templates
 ```
-
-All data, styles, and JavaScript are embedded directly in `dashboard.html` for easy deployment to static hosting (GitHub Pages, Netlify, etc.).
 
 ---
 
@@ -107,10 +126,6 @@ This project is provided for **educational and informational purposes**. Data va
 ---
 
 Built with care for better data-driven conversations about adolescent sexual and reproductive health.
-
----
-
-## License
 
 **Code:** MIT License — see [LICENSE](LICENSE) for details. You are free to use, modify, and distribute the dashboard code.
 
