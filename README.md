@@ -107,3 +107,11 @@ This project is provided for **educational and informational purposes**. Data va
 ---
 
 Built with care for better data-driven conversations about adolescent sexual and reproductive health.
+
+---
+
+## License
+
+**Code:** MIT License — see [LICENSE](LICENSE) for details. You are free to use, modify, and distribute the dashboard code.
+
+**Data:** The included health data is sourced from WHO, UNFPA, UNAIDS, and World Bank and is provided for informational and educational purposes. Please comply with each data provider's terms of use when reusing the data.
