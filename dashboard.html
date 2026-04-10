@@ -1579,10 +1579,12 @@
           y: regionData.map(d => d.abr),
           name: 'ABR (per 1,000)',
           type: 'bar',
+          offsetgroup: 'abr',
+          offset: -0.22,
+          width: 0.35,
           marker: {
-            color: '#028090',
-            opacity: 1,
-            line: { color: '#015c6b', width: 1 },
+            color: 'rgba(2,128,144,0.75)',
+            line: { color: '#028090', width: 1.5 },
             cornerradius: 3,
           },
           hovertemplate: '%{x}<br>ABR: %{y} per 1,000<extra></extra>',
@@ -1592,10 +1594,12 @@
           y: regionData.map(d => d.cpr),
           name: 'CPR (%)',
           type: 'bar',
+          offsetgroup: 'cpr',
+          offset: 0.22,
+          width: 0.35,
           marker: {
-            color: '#F36F21',
-            opacity: 1,
-            line: { color: '#d45a12', width: 1 },
+            color: 'rgba(243,111,33,0.75)',
+            line: { color: '#F36F21', width: 1.5 },
             cornerradius: 3,
           },
           hovertemplate: '%{x}<br>CPR: %{y}%<extra></extra>',
@@ -1605,7 +1609,6 @@
 
       const layout = {
         ...commonLayout,
-        barmode: 'group',
         xaxis: { tickfont: { size: 10 } },
         yaxis: {
           title: { text: 'ABR (per 1,000)', font: { size: 10, color: '#028090' } },
@@ -1618,8 +1621,7 @@
         },
         height: 340,
         legend: { orientation: 'h', y: -0.15, x: 0.5, xanchor: 'center', font: { size: 9 } },
-        bargap: 0.35,
-        bargroupgap: 0.15,
+        bargap: 0.45,
       };
 
       Plotly.newPlot('regionChart', traces, layout, plotlyConfig);
