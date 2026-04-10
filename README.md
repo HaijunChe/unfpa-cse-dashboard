@@ -27,10 +27,12 @@ An interactive data visualization dashboard for monitoring adolescent sexual and
 - **Sort Controls** — Cycle bar chart sorting (descending / ascending / alphabetical)
 
 ### Design
-- Clean, professional UI matching UNFPA brand colors (teal/blue palette)
-- Lucide icons throughout
-- Animated number counters, card hover effects, and scroll-triggered animations
-- Loading screen with progress indicator
+- **UNFPA-brand navigation bar** — Sticky top nav with official UNFPA logo, brand text, and site links matching unfpa.org styling
+- **Cinematic hero section** — Full-width teal-to-blue gradient with world map pattern overlay, orange pill badge, and dual CTA buttons
+- **UNFPA brand accents** — Orange (`#F36F21`) left borders on section headers, teal top borders on KPI cards, orange hover states on nav links
+- **Professional KPI cards** — Strong drop shadows, teal accent borders, animated number counters with trend arrows (↑ ↓), hover lift effects
+- **Dark UNFPA-style footer** — Brand logo, data source links, and copyright notice on deep navy background
+- Lucide icons throughout, scroll-triggered animations, loading screen
 - Fully responsive layout for mobile and desktop
 
 ---
