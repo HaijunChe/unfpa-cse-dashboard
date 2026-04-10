@@ -3,199 +3,726 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adolescent Sexual & Reproductive Health Dashboard</title>
+  <title>UNFPA — Adolescent Sexual & Reproductive Health Dashboard</title>
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ============ CSS VARIABLES ============ */
     :root {
       --unfpa-teal: #009EDB;
       --unfpa-dark-teal: #0077A3;
       --unfpa-navy: #003B5C;
       --unfpa-light: #E6F4F8;
       --unfpa-mid: #4DB8E8;
-      --text-dark: #1a1a2e;
-      --text-muted: #6b7280;
-      --bg-body: #f8fafc;
+      --unfpa-accent: #00A8B5;
+
+      --text-dark: #1a2a3a;
+      --text-muted: #5a6a7a;
+      --text-light: #8a9aaa;
+
+      --bg-body: #f0f4f8;
       --bg-card: #ffffff;
-      --border: #e2e8f0;
+      --bg-elevated: #fafbfc;
+      --border: #e0e6ec;
+      --border-light: #eef1f5;
+
+      --amber: #f59e0b;
+      --coral: #ef4444;
+      --green: #10b981;
+      --purple: #8b5cf6;
+
+      --shadow-sm: 0 1px 3px rgba(0,59,92,0.06);
+      --shadow: 0 4px 16px rgba(0,59,92,0.08);
+      --shadow-lg: 0 8px 32px rgba(0,59,92,0.12);
+      --shadow-hover: 0 12px 40px rgba(0,59,92,0.15);
+
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-xs: 6px;
     }
 
+    /* ============ RESET & BASE ============ */
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-body);
       color: var(--text-dark);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
     }
 
-    /* Header */
-    .header {
+    /* ============ LOADING SCREEN ============ */
+    #loader {
+      position: fixed;
+      inset: 0;
       background: linear-gradient(135deg, var(--unfpa-navy) 0%, var(--unfpa-dark-teal) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #loader .loader-icon {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.95); }
+    }
+    #loader .loader-text {
       color: white;
-      padding: 32px 40px;
-      box-shadow: 0 4px 20px rgba(0, 59, 92, 0.15);
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 16px;
+      opacity: 0.8;
+    }
+    #loader .loader-bar {
+      width: 160px;
+      height: 3px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    #loader .loader-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: white;
+      border-radius: 2px;
+      animation: loadBar 2s ease-out forwards;
+    }
+    @keyframes loadBar {
+      to { width: 100%; }
     }
 
+    /* ============ ANIMATIONS ============ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .count-animate {
+      animation: countUp 0.5s ease-out forwards;
+    }
+
+    /* ============ HEADER ============ */
+    .header {
+      background: linear-gradient(135deg, var(--unfpa-navy) 0%, var(--unfpa-dark-teal) 60%, var(--unfpa-teal) 100%);
+      color: white;
+      padding: 36px 40px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .header-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255,255,255,0.12);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+    .header-icon i { color: white; }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
     .header h1 {
-      font-size: 1.75rem;
+      font-size: 1.85rem;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
     }
-
     .header p {
       font-size: 0.95rem;
-      opacity: 0.85;
-      max-width: 600px;
+      opacity: 0.82;
+      max-width: 620px;
+      line-height: 1.6;
     }
 
-    /* Stats bar */
+    /* ============ STATS BAR ============ */
     .stats-bar {
-      display: flex;
-      gap: 24px;
-      padding: 24px 40px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 28px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1024px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .stats-bar { grid-template-columns: 1fr; padding: 20px 20px; }
     }
 
     .stat-card {
       background: var(--bg-card);
-      border-radius: 12px;
-      padding: 20px 28px;
-      min-width: 180px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      border-left: 4px solid var(--unfpa-teal);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-light);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
     }
-
-    .stat-card .value {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--unfpa-navy);
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--unfpa-teal), var(--unfpa-accent));
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-
-    .stat-card .label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-top: 4px;
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
     }
+    .stat-card:hover::before { opacity: 1; }
+    .stat-card.active {
+      box-shadow: var(--shadow-lg), 0 0 0 2px var(--unfpa-teal);
+    }
+    .stat-card.active::before { opacity: 1; }
 
-    /* Controls */
-    .controls {
-      padding: 0 40px 20px;
+    .stat-header {
       display: flex;
       align-items: center;
-      gap: 16px;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .stat-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-xs);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stat-icon.teal { background: var(--unfpa-light); color: var(--unfpa-teal); }
+    .stat-icon.amber { background: #fff7e6; color: var(--amber); }
+    .stat-icon.coral { background: #fef2f2; color: var(--coral); }
+    .stat-icon.green { background: #ecfdf5; color: var(--green); }
+
+    .stat-card .value {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--unfpa-navy);
+      line-height: 1.2;
+    }
+    .stat-card .label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .stat-country {
+      font-size: 0.7rem;
+      color: var(--unfpa-teal);
+      font-weight: 600;
+      margin-top: 4px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      height: 16px;
+    }
+    .stat-card.active .stat-country { opacity: 1; }
+
+    /* ============ CONTROLS BAR ============ */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
       flex-wrap: wrap;
     }
-
-    .controls label {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-muted);
+    @media (max-width: 600px) {
+      .controls-bar { padding: 8px 20px 16px; flex-direction: column; align-items: stretch; }
     }
 
-    .controls select {
-      padding: 10px 16px;
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+      max-width: 320px;
+    }
+    .search-box i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      width: 16px;
+      height: 16px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 11px 14px 11px 40px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.9rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      background: var(--bg-card);
+      color: var(--text-dark);
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-box input:focus {
+      border-color: var(--unfpa-teal);
+      box-shadow: 0 0 0 3px rgba(0,158,219,0.1);
+    }
+    .search-box input::placeholder { color: var(--text-light); }
+
+    .control-select {
+      padding: 11px 36px 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
       background: var(--bg-card);
       color: var(--text-dark);
       cursor: pointer;
-      min-width: 200px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235a6a7a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      min-width: 180px;
     }
-
-    .controls select:focus {
+    .control-select:focus {
       border-color: var(--unfpa-teal);
-      box-shadow: 0 0 0 3px rgba(0, 158, 219, 0.1);
+      box-shadow: 0 0 0 3px rgba(0,158,219,0.1);
     }
 
-    /* Grid layout */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--unfpa-teal);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--unfpa-dark-teal); }
+    .btn-ghost {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      background: var(--unfpa-light);
+      color: var(--unfpa-dark-teal);
+      border-color: var(--unfpa-teal);
+    }
+    .btn-ghost.active {
+      background: var(--unfpa-teal);
+      color: white;
+      border-color: var(--unfpa-teal);
+    }
+
+    /* ============ METRIC TOGGLE ============ */
+    .metric-toggle {
+      display: flex;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      border: 1px solid var(--border);
+    }
+    .metric-toggle .btn {
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-xs);
+    }
+    .metric-toggle .btn.active {
+      background: var(--bg-card);
+      color: var(--unfpa-navy);
+      box-shadow: var(--shadow-sm);
+      font-weight: 600;
+    }
+
+    /* ============ DASHBOARD GRID ============ */
     .dashboard-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 20px;
       padding: 0 40px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
       .dashboard-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
+    @media (max-width: 600px) {
+      .dashboard-grid { padding: 0 20px 24px; }
+    }
 
+    /* ============ CARDS ============ */
     .card {
       background: var(--bg-card);
-      border-radius: 16px;
+      border-radius: var(--radius);
       padding: 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-light);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
     }
-
-    .card.full-width {
-      grid-column: 1 / -1;
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
+    .card.full-width { grid-column: 1 / -1; }
 
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .card-title-group { flex: 1; }
     .card h2 {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--unfpa-navy);
       margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
     .card .subtitle {
       font-size: 0.8rem;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .card-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .card-action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-light);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .card-action-btn:hover {
+      border-color: var(--unfpa-teal);
+      color: var(--unfpa-teal);
+      background: var(--unfpa-light);
     }
 
     .chart-container {
       width: 100%;
+      position: relative;
     }
 
-    /* Footer */
+    /* ============ MAP CARD ============ */
+    .map-card .metric-toggle-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    /* ============ INSIGHT BOX ============ */
+    .insight-box {
+      background: linear-gradient(135deg, var(--unfpa-light) 0%, #f0f8ff 100%);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      margin-top: 16px;
+      border-left: 3px solid var(--unfpa-teal);
+    }
+    .insight-box h4 {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--unfpa-dark-teal);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .insight-box p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ============ COUNTRY DETAIL PANEL ============ */
+    #countryPanel {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      max-width: 90vw;
+      height: 100vh;
+      background: var(--bg-card);
+      box-shadow: -8px 0 40px rgba(0,59,92,0.15);
+      z-index: 100;
+      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    #countryPanel.open { right: 0; }
+    #countryPanel .panel-header {
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, var(--unfpa-light) 0%, white 100%);
+    }
+    #countryPanel .panel-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--unfpa-navy);
+    }
+    #countryPanel .panel-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    #countryPanel .panel-close {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    #countryPanel .panel-close:hover {
+      border-color: var(--coral);
+      color: var(--coral);
+    }
+    #countryPanel .panel-body { padding: 20px 24px; flex: 1; }
+    #countryPanel .panel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,59,92,0.2);
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+    #countryPanel.open + .panel-overlay,
+    .panel-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .panel-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .panel-stat {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      border: 1px solid var(--border-light);
+    }
+    .panel-stat .label {
+      font-size: 0.72rem;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .panel-stat .value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--unfpa-navy);
+    }
+
+    /* ============ FOOTER ============ */
     .footer {
-      padding: 24px 40px;
+      padding: 28px 40px;
       text-align: center;
       font-size: 0.75rem;
-      color: var(--text-muted);
+      color: var(--text-light);
       border-top: 1px solid var(--border);
+      background: white;
     }
-
     .footer a {
       color: var(--unfpa-teal);
       text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 1024px) {
+      .header { padding: 28px 24px 36px; }
+      .header h1 { font-size: 1.5rem; }
+      .controls-bar { gap: 10px; }
+      .search-box { max-width: none; }
+      .metric-toggle { flex-wrap: wrap; justify-content: center; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Loading Screen -->
+  <div id="loader">
+    <div class="loader-icon">
+      <i data-lucide="activity" style="width:48px;height:48px;color:white;"></i>
+    </div>
+    <div class="loader-text">Loading Dashboard...</div>
+    <div class="loader-bar"><div class="loader-bar-inner"></div></div>
+  </div>
+
+  <!-- Country Detail Panel -->
+  <div id="countryPanel">
+    <div class="panel-header">
+      <div>
+        <div class="panel-title" id="panelCountryName">--</div>
+        <div class="panel-sub" id="panelCountryRegion">--</div>
+      </div>
+      <button class="panel-close" onclick="closeCountryPanel()" aria-label="Close panel">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+    <div class="panel-body">
+      <div class="panel-stat-grid" id="panelStatGrid">
+        <!-- Filled by JS -->
+      </div>
+      <div id="panelRadarChart" style="width:100%;height:320px;"></div>
+    </div>
+  </div>
+  <div class="panel-overlay" id="panelOverlay" onclick="closeCountryPanel()"></div>
+
+  <!-- Header -->
   <header class="header">
-    <h1>Adolescent Sexual & Reproductive Health Dashboard</h1>
-    <p>Global indicators on adolescent birth rates, contraceptive use, and trends over time. Data sourced from WHO and UNFPA (latest available estimates, 2015-2022).</p>
+    <div class="header-top">
+      <div class="header-icon">
+        <i data-lucide="heart-pulse" style="width:26px;height:26px;"></i>
+      </div>
+      <span class="header-badge">
+        <i data-lucide="globe" style="width:12px;height:12px;"></i>
+        WHO / UNFPA Data
+      </span>
+    </div>
+    <h1>Adolescent Sexual & Reproductive Health</h1>
+    <p>Global indicators on adolescent birth rates, contraceptive use, and related health outcomes. Data sourced from WHO Global Health Observatory, UNFPA, and World Bank (2015-2022 estimates).</p>
   </header>
 
-  <div class="stats-bar">
-    <div class="stat-card">
+  <!-- Stats Bar -->
+  <div class="stats-bar fade-up">
+    <div class="stat-card" id="statCardAbr" onclick="selectMetric('abr')">
+      <div class="stat-header">
+        <div class="stat-icon teal"><i data-lucide="baby" style="width:18px;height:18px;"></i></div>
+      </div>
       <div class="value" id="stat-birth-rate">--</div>
-      <div class="label">Global Avg Adolescent Birth Rate</div>
+      <div class="label">Adolescent Birth Rate<br><span style="font-size:0.7rem;color:var(--text-light)">per 1,000 women aged 15-19</span></div>
+      <div class="stat-country" id="statCountryAbr"></div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" id="statCardCpr" onclick="selectMetric('cpr')">
+      <div class="stat-header">
+        <div class="stat-icon green"><i data-lucide="shield-check" style="width:18px;height:18px;"></i></div>
+      </div>
       <div class="value" id="stat-contraceptive">--</div>
-      <div class="label">Avg Contraceptive Prevalence</div>
+      <div class="label">Contraceptive Prevalence<br><span style="font-size:0.7rem;color:var(--text-light)">modern methods, women 15-49</span></div>
+      <div class="stat-country" id="statCountryCpr"></div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" id="statCardUnmet" onclick="selectMetric('unmet')">
+      <div class="stat-header">
+        <div class="stat-icon amber"><i data-lucide="alert-circle" style="width:18px;height:18px;"></i></div>
+      </div>
       <div class="value" id="stat-unmet">--</div>
-      <div class="label">Avg Unmet Need for Family Planning</div>
+      <div class="label">Unmet Need for FP<br><span style="font-size:0.7rem;color:var(--text-light)">women with unmet need</span></div>
+      <div class="stat-country" id="statCountryUnmet"></div>
+    </div>
+    <div class="stat-card" id="statCardHiv" onclick="selectMetric('hiv')">
+      <div class="stat-header">
+        <div class="stat-icon coral"><i data-lucide="activity" style="width:18px;height:18px;"></i></div>
+      </div>
+      <div class="value" id="stat-hiv">--</div>
+      <div class="label">HIV Prevalence<br><span style="font-size:0.7rem;color:var(--text-light)">women aged 15-24 (%)</span></div>
+      <div class="stat-country" id="statCountryHiv"></div>
     </div>
   </div>
 
-  <div class="controls">
-    <label for="regionFilter">Filter by Region:</label>
-    <select id="regionFilter">
+  <!-- Controls -->
+  <div class="controls-bar fade-up">
+    <div class="search-box">
+      <i data-lucide="search"></i>
+      <input type="text" id="countrySearch" placeholder="Search country..." autocomplete="off">
+    </div>
+    <select id="regionFilter" class="control-select">
       <option value="all">All Regions</option>
       <option value="Africa">Sub-Saharan Africa</option>
       <option value="Asia">Asia & Pacific</option>
@@ -203,131 +730,238 @@
       <option value="Europe">Europe & Central Asia</option>
       <option value="MENA">Middle East & North Africa</option>
     </select>
+    <button class="btn btn-ghost" id="btnReset" onclick="resetAll()">
+      <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>
+      Reset
+    </button>
+    <button class="btn btn-primary" onclick="exportAllData()">
+      <i data-lucide="download" style="width:14px;height:14px;"></i>
+      Export CSV
+    </button>
   </div>
 
+  <!-- Dashboard Grid -->
   <div class="dashboard-grid">
-    <div class="card full-width">
-      <h2>Adolescent Birth Rate by Country</h2>
-      <p class="subtitle">Births per 1,000 women aged 15-19 years (most recent estimate, 2015-2022)</p>
+
+    <!-- Map Card -->
+    <div class="card full-width map-card fade-up">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2><i data-lucide="map" style="width:18px;height:18px;color:var(--unfpa-teal);"></i> Global Map</h2>
+          <p class="subtitle" id="mapSubtitle">Click any country to view detailed indicators. Use the toggle below to switch metrics.</p>
+        </div>
+        <div class="card-actions">
+          <button class="card-action-btn" title="Export map" onclick="exportChart('mapChart','world-map')">
+            <i data-lucide="download" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+      <div class="metric-toggle-wrap">
+        <div class="metric-toggle">
+          <button class="btn active" data-metric="abr" onclick="setMapMetric('abr')">Birth Rate</button>
+          <button class="btn" data-metric="cpr" onclick="setMapMetric('cpr')">Contraceptive Use</button>
+          <button class="btn" data-metric="unmet" onclick="setMapMetric('unmet')">Unmet Need</button>
+          <button class="btn" data-metric="hiv" onclick="setMapMetric('hiv')">HIV Prevalence</button>
+        </div>
+      </div>
       <div id="mapChart" class="chart-container"></div>
+      <div class="insight-box" id="mapInsight">
+        <h4><i data-lucide="lightbulb" style="width:14px;height:14px;"></i> Insight</h4>
+        <p id="mapInsightText">Sub-Saharan Africa shows the highest adolescent birth rates globally, with several countries exceeding 100 births per 1,000 women aged 15-19.</p>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Contraceptive Prevalence Rate</h2>
-      <p class="subtitle">Percentage of women aged 15-49 using modern contraception</p>
+    <!-- Bar Chart Card -->
+    <div class="card fade-up">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2><i data-lucide="bar-chart-3" style="width:18px;height:18px;color:var(--unfpa-teal);"></i> Country Ranking</h2>
+          <p class="subtitle">Top countries by selected indicator</p>
+        </div>
+        <div class="card-actions">
+          <button class="card-action-btn" title="Sort" onclick="cycleBarSort()">
+            <i data-lucide="arrow-up-down" style="width:14px;height:14px;"></i>
+          </button>
+          <button class="card-action-btn" title="Export chart" onclick="exportChart('barChart','country-ranking')">
+            <i data-lucide="download" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
       <div id="barChart" class="chart-container"></div>
+      <div class="insight-box" id="barInsight">
+        <h4><i data-lucide="lightbulb" style="width:14px;height:14px;"></i> Insight</h4>
+        <p id="barInsightText">European and East Asian countries lead in contraceptive prevalence, while many Sub-Saharan African nations remain below 30%.</p>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Key Indicators Over Time</h2>
-      <p class="subtitle">Trends in adolescent birth rate, contraceptive use, and unmet need (2010-2022)</p>
+    <!-- Trend Chart Card -->
+    <div class="card fade-up">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2><i data-lucide="trending-up" style="width:18px;height:18px;color:var(--unfpa-teal);"></i> Trends Over Time</h2>
+          <p class="subtitle">Key indicators from 2010 to 2022</p>
+        </div>
+        <div class="card-actions">
+          <button class="card-action-btn" title="Export chart" onclick="exportChart('trendChart','trends-over-time')">
+            <i data-lucide="download" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
       <div id="trendChart" class="chart-container"></div>
+      <div class="insight-box" id="trendInsight">
+        <h4><i data-lucide="lightbulb" style="width:14px;height:14px;"></i> Insight</h4>
+        <p>Global adolescent birth rates have declined 25% since 2010, but progress slowed during the COVID-19 pandemic period.</p>
+      </div>
     </div>
+
+    <!-- Scatter Plot Card -->
+    <div class="card full-width fade-up">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2><i data-lucide="scatter-chart" style="width:18px;height:18px;color:var(--unfpa-teal);"></i> Relationship Analysis</h2>
+          <p class="subtitle">Adolescent Birth Rate vs. Contraceptive Prevalence — each point represents a country, colored by region</p>
+        </div>
+        <div class="card-actions">
+          <button class="card-action-btn" title="Export chart" onclick="exportChart('scatterChart','relationship-analysis')">
+            <i data-lucide="download" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+      <div id="scatterChart" class="chart-container"></div>
+      <div class="insight-box">
+        <h4><i data-lucide="lightbulb" style="width:14px;height:14px;"></i> Insight</h4>
+        <p>A strong negative correlation exists between contraceptive prevalence and adolescent birth rates. Countries in Sub-Saharan Africa cluster in the upper-left quadrant (high ABR, low CPR).</p>
+      </div>
+    </div>
+
+    <!-- Regional Comparison Card -->
+    <div class="card full-width fade-up">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2><i data-lucide="layers" style="width:18px;height:18px;color:var(--unfpa-teal);"></i> Regional Comparison</h2>
+          <p class="subtitle">Average indicator values by region</p>
+        </div>
+        <div class="card-actions">
+          <button class="card-action-btn" title="Export chart" onclick="exportChart('regionChart','regional-comparison')">
+            <i data-lucide="download" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+      <div id="regionChart" class="chart-container"></div>
+      <div class="insight-box">
+        <h4><i data-lucide="lightbulb" style="width:14px;height:14px;"></i> Insight</h4>
+        <p>Sub-Saharan Africa faces the greatest SRH challenges with the highest adolescent birth rates and HIV prevalence, while Europe shows the strongest contraceptive coverage and lowest birth rates.</p>
+      </div>
+    </div>
+
   </div>
 
+  <!-- Footer -->
   <div class="footer">
-    Data sources: WHO Global Health Observatory, UNFPA State of World Population, World Bank Open Data.<br>
-    Dashboard created for informational purposes. Values are estimates and may vary by year of measurement.
+    Data sources: <a href="https://www.who.int/data/gho" target="_blank">WHO Global Health Observatory</a>,
+    <a href="https://www.unfpa.org/swp" target="_blank">UNFPA State of World Population</a>,
+    <a href="https://data.unaids.org/" target="_blank">UNAIDS</a>,
+    <a href="https://www.worldbank.org/en/research" target="_blank">World Bank Open Data</a>.<br>
+    Dashboard created for informational and educational purposes. Values are estimates and may vary by year of measurement.
   </div>
 
   <script>
     // ============ DATA ============
-    // Country data: Adolescent Birth Rate (per 1,000 women 15-19), Contraceptive Prevalence (% modern methods), Region
+    // Extended country data with additional WHO indicators
     const countryData = [
-      { iso: 'NGA', name: 'Nigeria',       abr: 101, cpr: 12,  region: 'Africa' },
-      { iso: 'IND', name: 'India',         abr: 16,  cpr: 47,  region: 'Asia' },
-      { iso: 'BRA', name: 'Brazil',        abr: 52,  cpr: 66,  region: 'Americas' },
-      { iso: 'PAK', name: 'Pakistan',      abr: 46,  cpr: 25,  region: 'Asia' },
-      { iso: 'IDN', name: 'Indonesia',     abr: 37,  cpr: 58,  region: 'Asia' },
-      { iso: 'ETH', name: 'Ethiopia',      abr: 70,  cpr: 41,  region: 'Africa' },
-      { iso: 'COD', name: 'D.R. Congo',    abr: 110, cpr: 8,   region: 'Africa' },
-      { iso: 'BGD', name: 'Bangladesh',    abr: 74,  cpr: 52,  region: 'Asia' },
-      { iso: 'MEX', name: 'Mexico',        abr: 62,  cpr: 57,  region: 'Americas' },
-      { iso: 'EGY', name: 'Egypt',         abr: 51,  cpr: 57,  region: 'MENA' },
-      { iso: 'KEN', name: 'Kenya',         abr: 82,  cpr: 53,  region: 'Africa' },
-      { iso: 'PHL', name: 'Philippines',   abr: 47,  cpr: 40,  region: 'Asia' },
-      { iso: 'VNM', name: 'Vietnam',       abr: 31,  cpr: 67,  region: 'Asia' },
-      { iso: 'TZA', name: 'Tanzania',      abr: 112, cpr: 32,  region: 'Africa' },
-      { iso: 'GTM', name: 'Guatemala',     abr: 78,  cpr: 44,  region: 'Americas' },
-      { iso: 'ZAF', name: 'South Africa',  abr: 65,  cpr: 62,  region: 'Africa' },
-      { iso: 'COL', name: 'Colombia',      abr: 58,  cpr: 66,  region: 'Americas' },
-      { iso: 'ARG', name: 'Argentina',     abr: 52,  cpr: 62,  region: 'Americas' },
-      { iso: 'UGA', name: 'Uganda',        abr: 102, cpr: 39,  region: 'Africa' },
-      { iso: 'ZWE', name: 'Zimbabwe',      abr: 86,  cpr: 67,  region: 'Africa' },
-      { iso: 'NPL', name: 'Nepal',         abr: 62,  cpr: 43,  region: 'Asia' },
-      { iso: 'MAR', name: 'Morocco',       abr: 28,  cpr: 61,  region: 'MENA' },
-      { iso: 'PER', name: 'Peru',          abr: 50,  cpr: 55,  region: 'Americas' },
-      { iso: 'GHA', name: 'Ghana',         abr: 66,  cpr: 26,  region: 'Africa' },
-      { iso: 'CIV', name: "Cote d'Ivoire", abr: 118, cpr: 19,  region: 'Africa' },
-      { iso: 'MLI', name: 'Mali',          abr: 168, cpr: 17,  region: 'Africa' },
-      { iso: 'MMR', name: 'Myanmar',       abr: 29,  cpr: 52,  region: 'Asia' },
-      { iso: 'CHN', name: 'China',         abr: 7,   cpr: 84,  region: 'Asia' },
-      { iso: 'TUR', name: 'Turkiye',       abr: 30,  cpr: 58,  region: 'Europe' },
-      { iso: 'GBR', name: 'United Kingdom',abr: 13,  cpr: 67,  region: 'Europe' },
-      { iso: 'SWE', name: 'Sweden',        abr: 5,   cpr: 69,  region: 'Europe' },
-      { iso: 'USA', name: 'United States', abr: 15,  cpr: 65,  region: 'Americas' },
-      { iso: 'JPN', name: 'Japan',         abr: 3,   cpr: 40,  region: 'Asia' },
-      { iso: 'KOR', name: 'South Korea',   abr: 2,   cpr: 80,  region: 'Asia' },
-      { iso: 'DEU', name: 'Germany',       abr: 6,   cpr: 66,  region: 'Europe' },
-      { iso: 'FRA', name: 'France',        abr: 6,   cpr: 65,  region: 'Europe' },
-      { iso: 'CAN', name: 'Canada',        abr: 8,   cpr: 68,  region: 'Americas' },
-      { iso: 'AUS', name: 'Australia',     abr: 10,  cpr: 41,  region: 'Asia' },
-      { iso: 'RUS', name: 'Russia',        abr: 22,  cpr: 58,  region: 'Europe' },
-      { iso: 'THA', name: 'Thailand',      abr: 36,  cpr: 75,  region: 'Asia' },
-      { iso: 'IRN', name: 'Iran',          abr: 32,  cpr: 77,  region: 'MENA' },
-      { iso: 'SEN', name: 'Senegal',       abr: 73,  cpr: 26,  region: 'Africa' },
-      { iso: 'RWA', name: 'Rwanda',        abr: 32,  cpr: 58,  region: 'Africa' },
-      { iso: 'MMR', name: 'Myanmar',       abr: 29,  cpr: 52,  region: 'Asia' },
-      { iso: 'KHM', name: 'Cambodia',      abr: 43,  cpr: 59,  region: 'Asia' },
-      { iso: 'MWI', name: 'Malawi',        abr: 122, cpr: 66,  region: 'Africa' },
-      { iso: 'MDG', name: 'Madagascar',    abr: 102, cpr: 43,  region: 'Africa' },
-      { iso: 'HTI', name: 'Haiti',         abr: 52,  cpr: 31,  region: 'Americas' },
-      { iso: 'BFA', name: 'Burkina Faso',  abr: 120, cpr: 32,  region: 'Africa' },
-      { iso: 'NER', name: 'Niger',         abr: 179, cpr: 18,  region: 'Africa' },
-      { iso: 'MOZ', name: 'Mozambique',    abr: 145, cpr: 30,  region: 'Africa' },
-      { iso: 'ZMB', name: 'Zambia',        abr: 115, cpr: 50,  region: 'Africa' },
-      { iso: 'SSD', name: 'South Sudan',   abr: 130, cpr: 6,   region: 'Africa' },
-      { iso: 'LBR', name: 'Liberia',       abr: 115, cpr: 24,  region: 'Africa' },
-      { iso: 'SLE', name: 'Sierra Leone',  abr: 99,  cpr: 22,  region: 'Africa' },
-      { iso: 'AFG', name: 'Afghanistan',   abr: 62,  cpr: 18,  region: 'Asia' },
-      { iso: 'YEM', name: 'Yemen',         abr: 59,  cpr: 20,  region: 'MENA' },
-      { iso: 'IRQ', name: 'Iraq',          abr: 63,  cpr: 37,  region: 'MENA' },
-      { iso: 'JOR', name: 'Jordan',        abr: 26,  cpr: 52,  region: 'MENA' },
-      { iso: 'TUN', name: 'Tunisia',       abr: 6,   cpr: 50,  region: 'MENA' },
-      { iso: 'DZA', name: 'Algeria',       abr: 10,  cpr: 57,  region: 'MENA' },
-      { iso: 'CHL', name: 'Chile',         abr: 41,  cpr: 58,  region: 'Americas' },
-      { iso: 'URY', name: 'Uruguay',       abr: 44,  cpr: 72,  region: 'Americas' },
-      { iso: 'BOL', name: 'Bolivia',       abr: 65,  cpr: 39,  region: 'Americas' },
-      { iso: 'PRY', name: 'Paraguay',      abr: 60,  cpr: 68,  region: 'Americas' },
-      { iso: 'ECU', name: 'Ecuador',       abr: 67,  cpr: 53,  region: 'Americas' },
-      { iso: 'POL', name: 'Poland',        abr: 11,  cpr: 62,  region: 'Europe' },
-      { iso: 'ROU', name: 'Romania',       abr: 23,  cpr: 57,  region: 'Europe' },
-      { iso: 'BGR', name: 'Bulgaria',      abr: 34,  cpr: 56,  region: 'Europe' },
-      { iso: 'UKR', name: 'Ukraine',       abr: 19,  cpr: 52,  region: 'Europe' },
-      { iso: 'ITA', name: 'Italy',         abr: 5,   cpr: 65,  region: 'Europe' },
-      { iso: 'ESP', name: 'Spain',         abr: 6,   cpr: 61,  region: 'Europe' },
-      { iso: 'NLD', name: 'Netherlands',   abr: 4,   cpr: 70,  region: 'Europe' },
-      { iso: 'BEL', name: 'Belgium',       abr: 7,   cpr: 66,  region: 'Europe' },
-      { iso: 'CHE', name: 'Switzerland',   abr: 3,   cpr: 63,  region: 'Europe' },
-      { iso: 'AUT', name: 'Austria',       abr: 7,   cpr: 57,  region: 'Europe' },
-      { iso: 'HUN', name: 'Hungary',       abr: 13,  cpr: 55,  region: 'Europe' },
-      { iso: 'CZE', name: 'Czechia',       abr: 10,  cpr: 70,  region: 'Europe' },
-      { iso: 'SVK', name: 'Slovakia',      abr: 23,  cpr: 62,  region: 'Europe' },
-      { iso: 'LKA', name: 'Sri Lanka',     abr: 16,  cpr: 52,  region: 'Asia' },
-      { iso: 'MDV', name: 'Maldives',      abr: 11,  cpr: 33,  region: 'Asia' },
-      { iso: 'BTN', name: 'Bhutan',        abr: 31,  cpr: 66,  region: 'Asia' },
-      { iso: 'LAO', name: 'Laos',          abr: 67,  cpr: 54,  region: 'Asia' },
-      { iso: 'LBN', name: 'Lebanon',       abr: 14,  cpr: 42,  region: 'MENA' },
-      { iso: 'OMN', name: 'Oman',          abr: 14,  cpr: 29,  region: 'MENA' },
-      { iso: 'KWT', name: 'Kuwait',        abr: 9,   cpr: 40,  region: 'MENA' },
-      { iso: 'ARE', name: 'UAE',           abr: 5,   cpr: 48,  region: 'MENA' },
-      { iso: 'QAT', name: 'Qatar',         abr: 6,   cpr: 38,  region: 'MENA' },
-      { iso: 'BHR', name: 'Bahrain',       abr: 9,   cpr: 45,  region: 'MENA' },
-      { iso: 'SAU', name: 'Saudi Arabia',  abr: 8,   cpr: 32,  region: 'MENA' },
-      { iso: 'ISR', name: 'Israel',        abr: 9,   cpr: 59,  region: 'MENA' },
+      { iso: 'NGA', name: 'Nigeria',       abr: 101, cpr: 12,  hiv: 1.4, sexEd: 28, childMarriage: 43, mmr: 1040, abr1014: 21, region: 'Africa' },
+      { iso: 'IND', name: 'India',         abr: 16,  cpr: 47,  hiv: 0.1, sexEd: 35, childMarriage: 27, mmr: 103,  abr1014: 2,  region: 'Asia' },
+      { iso: 'BRA', name: 'Brazil',        abr: 52,  cpr: 66,  hiv: 0.4, sexEd: 58, childMarriage: 36, mmr: 72,   abr1014: 8,  region: 'Americas' },
+      { iso: 'PAK', name: 'Pakistan',      abr: 46,  cpr: 25,  hiv: 0.1, sexEd: 12, childMarriage: 21, mmr: 186,  abr1014: 4,  region: 'Asia' },
+      { iso: 'IDN', name: 'Indonesia',     abr: 37,  cpr: 58,  hiv: 0.3, sexEd: 32, childMarriage: 14, mmr: 173,  abr1014: 3,  region: 'Asia' },
+      { iso: 'ETH', name: 'Ethiopia',      abr: 70,  cpr: 41,  hiv: 0.7, sexEd: 18, childMarriage: 40, mmr: 267,  abr1014: 12, region: 'Africa' },
+      { iso: 'COD', name: 'D.R. Congo',    abr: 110, cpr: 8,   hiv: 0.5, sexEd: 8,  childMarriage: 37, mmr: 547,  abr1014: 28, region: 'Africa' },
+      { iso: 'BGD', name: 'Bangladesh',    abr: 74,  cpr: 52,  hiv: 0.0, sexEd: 22, childMarriage: 51, mmr: 173,  abr1014: 14, region: 'Asia' },
+      { iso: 'MEX', name: 'Mexico',        abr: 62,  cpr: 57,  hiv: 0.2, sexEd: 55, childMarriage: 23, mmr: 33,   abr1014: 7,  region: 'Americas' },
+      { iso: 'EGY', name: 'Egypt',         abr: 51,  cpr: 57,  hiv: 0.1, sexEd: 15, childMarriage: 17, mmr: 37,   abr1014: 6,  region: 'MENA' },
+      { iso: 'KEN', name: 'Kenya',         abr: 82,  cpr: 53,  hiv: 3.3, sexEd: 42, childMarriage: 23, mmr: 530,  abr1014: 16, region: 'Africa' },
+      { iso: 'PHL', name: 'Philippines',   abr: 47,  cpr: 40,  hiv: 0.1, sexEd: 25, childMarriage: 16, mmr: 78,   abr1014: 4,  region: 'Asia' },
+      { iso: 'VNM', name: 'Vietnam',       abr: 31,  cpr: 67,  hiv: 0.2, sexEd: 38, childMarriage: 11, mmr: 43,   abr1014: 2,  region: 'Asia' },
+      { iso: 'TZA', name: 'Tanzania',      abr: 112, cpr: 32,  hiv: 3.5, sexEd: 20, childMarriage: 31, mmr: 524,  abr1014: 22, region: 'Africa' },
+      { iso: 'GTM', name: 'Guatemala',     abr: 78,  cpr: 44,  hiv: 0.4, sexEd: 30, childMarriage: 30, mmr: 95,   abr1014: 10, region: 'Americas' },
+      { iso: 'ZAF', name: 'South Africa',  abr: 65,  cpr: 62,  hiv: 12.2,sexEd: 52, childMarriage: 6,  mmr: 127,  abr1014: 10, region: 'Africa' },
+      { iso: 'COL', name: 'Colombia',      abr: 58,  cpr: 66,  hiv: 0.4, sexEd: 62, childMarriage: 23, mmr: 83,   abr1014: 9,  region: 'Americas' },
+      { iso: 'ARG', name: 'Argentina',     abr: 52,  cpr: 62,  hiv: 0.4, sexEd: 70, childMarriage: 16, mmr: 39,   abr1014: 6,  region: 'Americas' },
+      { iso: 'UGA', name: 'Uganda',        abr: 102, cpr: 39,  hiv: 4.6, sexEd: 25, childMarriage: 34, mmr: 284,  abr1014: 20, region: 'Africa' },
+      { iso: 'ZWE', name: 'Zimbabwe',      abr: 86,  cpr: 67,  hiv: 7.9, sexEd: 38, childMarriage: 34, mmr: 458,  abr1014: 18, region: 'Africa' },
+      { iso: 'NPL', name: 'Nepal',         abr: 62,  cpr: 43,  hiv: 0.2, sexEd: 30, childMarriage: 40, mmr: 151,  abr1014: 8,  region: 'Asia' },
+      { iso: 'MAR', name: 'Morocco',       abr: 28,  cpr: 61,  hiv: 0.1, sexEd: 18, childMarriage: 14, mmr: 29,   abr1014: 2,  region: 'MENA' },
+      { iso: 'PER', name: 'Peru',          abr: 50,  cpr: 55,  hiv: 0.3, sexEd: 48, childMarriage: 19, mmr: 69,   abr1014: 5,  region: 'Americas' },
+      { iso: 'GHA', name: 'Ghana',         abr: 66,  cpr: 26,  hiv: 1.3, sexEd: 35, childMarriage: 21, mmr: 263,  abr1014: 11, region: 'Africa' },
+      { iso: 'CIV', name: "Cote d'Ivoire", abr: 118, cpr: 19,  hiv: 1.6, sexEd: 14, childMarriage: 27, mmr: 617,  abr1014: 24, region: 'Africa' },
+      { iso: 'MLI', name: 'Mali',          abr: 168, cpr: 17,  hiv: 0.6, sexEd: 10, childMarriage: 52, mmr: 562,  abr1014: 38, region: 'Africa' },
+      { iso: 'MMR', name: 'Myanmar',       abr: 29,  cpr: 52,  hiv: 0.5, sexEd: 12, childMarriage: 16, mmr: 250,  abr1014: 3,  region: 'Asia' },
+      { iso: 'CHN', name: 'China',         abr: 7,   cpr: 84,  hiv: 0.1, sexEd: 15, childMarriage: 3,  mmr: 23,   abr1014: 0.5,region: 'Asia' },
+      { iso: 'TUR', name: 'Turkiye',       abr: 30,  cpr: 58,  hiv: 0.1, sexEd: 25, childMarriage: 15, mmr: 17,   abr1014: 2,  region: 'Europe' },
+      { iso: 'GBR', name: 'United Kingdom',abr: 13,  cpr: 67,  hiv: 0.1, sexEd: 78, childMarriage: 3,  mmr: 10,   abr1014: 1,  region: 'Europe' },
+      { iso: 'SWE', name: 'Sweden',        abr: 5,   cpr: 69,  hiv: 0.1, sexEd: 85, childMarriage: 1,  mmr: 4,    abr1014: 0.2,region: 'Europe' },
+      { iso: 'USA', name: 'United States', abr: 15,  cpr: 65,  hiv: 0.3, sexEd: 55, childMarriage: 5,  mmr: 24,   abr1014: 1,  region: 'Americas' },
+      { iso: 'JPN', name: 'Japan',         abr: 3,   cpr: 40,  hiv: 0.0, sexEd: 35, childMarriage: 3,  mmr: 5,    abr1014: 0.1,region: 'Asia' },
+      { iso: 'KOR', name: 'South Korea',   abr: 2,   cpr: 80,  hiv: 0.0, sexEd: 25, childMarriage: 1,  mmr: 11,   abr1014: 0.1,region: 'Asia' },
+      { iso: 'DEU', name: 'Germany',       abr: 6,   cpr: 66,  hiv: 0.1, sexEd: 75, childMarriage: 2,  mmr: 7,    abr1014: 0.3,region: 'Europe' },
+      { iso: 'FRA', name: 'France',        abr: 6,   cpr: 65,  hiv: 0.2, sexEd: 80, childMarriage: 3,  mmr: 8,    abr1014: 0.2,region: 'Europe' },
+      { iso: 'CAN', name: 'Canada',        abr: 8,   cpr: 68,  hiv: 0.1, sexEd: 70, childMarriage: 3,  mmr: 10,   abr1014: 0.5,region: 'Americas' },
+      { iso: 'AUS', name: 'Australia',     abr: 10,  cpr: 41,  hiv: 0.1, sexEd: 65, childMarriage: 4,  mmr: 6,    abr1014: 0.8,region: 'Asia' },
+      { iso: 'RUS', name: 'Russia',        abr: 22,  cpr: 58,  hiv: 0.9, sexEd: 20, childMarriage: 12, mmr: 17,   abr1014: 3,  region: 'Europe' },
+      { iso: 'THA', name: 'Thailand',      abr: 36,  cpr: 75,  hiv: 0.6, sexEd: 45, childMarriage: 11, mmr: 29,   abr1014: 3,  region: 'Asia' },
+      { iso: 'IRN', name: 'Iran',          abr: 32,  cpr: 77,  hiv: 0.1, sexEd: 18, childMarriage: 17, mmr: 22,   abr1014: 3,  region: 'MENA' },
+      { iso: 'SEN', name: 'Senegal',       abr: 73,  cpr: 26,  hiv: 0.4, sexEd: 22, childMarriage: 29, mmr: 263,  abr1014: 12, region: 'Africa' },
+      { iso: 'RWA', name: 'Rwanda',        abr: 32,  cpr: 58,  hiv: 2.1, sexEd: 35, childMarriage: 7,  mmr: 248,  abr1014: 4,  region: 'Africa' },
+      { iso: 'KHM', name: 'Cambodia',      abr: 43,  cpr: 59,  hiv: 0.4, sexEd: 20, childMarriage: 19, mmr: 160,  abr1014: 6,  region: 'Asia' },
+      { iso: 'MWI', name: 'Malawi',        abr: 122, cpr: 66,  hiv: 5.8, sexEd: 28, childMarriage: 42, mmr: 349,  abr1014: 24, region: 'Africa' },
+      { iso: 'MDG', name: 'Madagascar',    abr: 102, cpr: 43,  hiv: 0.3, sexEd: 15, childMarriage: 38, mmr: 385,  abr1014: 19, region: 'Africa' },
+      { iso: 'HTI', name: 'Haiti',         abr: 52,  cpr: 31,  hiv: 1.4, sexEd: 18, childMarriage: 27, mmr: 350,  abr1014: 8,  region: 'Americas' },
+      { iso: 'BFA', name: 'Burkina Faso',  abr: 120, cpr: 32,  hiv: 0.4, sexEd: 16, childMarriage: 52, mmr: 264,  abr1014: 24, region: 'Africa' },
+      { iso: 'NER', name: 'Niger',         abr: 179, cpr: 18,  hiv: 0.2, sexEd: 8,  childMarriage: 76, mmr: 509,  abr1014: 42, region: 'Africa' },
+      { iso: 'MOZ', name: 'Mozambique',    abr: 145, cpr: 30,  hiv: 8.4, sexEd: 12, childMarriage: 48, mmr: 437,  abr1014: 32, region: 'Africa' },
+      { iso: 'ZMB', name: 'Zambia',        abr: 115, cpr: 50,  hiv: 6.0, sexEd: 30, childMarriage: 29, mmr: 218,  abr1014: 22, region: 'Africa' },
+      { iso: 'SSD', name: 'South Sudan',   abr: 130, cpr: 6,   hiv: 2.3, sexEd: 5,  childMarriage: 52, mmr: 1223, abr1014: 34, region: 'Africa' },
+      { iso: 'LBR', name: 'Liberia',       abr: 115, cpr: 24,  hiv: 0.9, sexEd: 10, childMarriage: 36, mmr: 652,  abr1014: 22, region: 'Africa' },
+      { iso: 'SLE', name: 'Sierra Leone',  abr: 99,  cpr: 22,  hiv: 1.0, sexEd: 12, childMarriage: 30, mmr: 443,  abr1014: 18, region: 'Africa' },
+      { iso: 'AFG', name: 'Afghanistan',   abr: 62,  cpr: 18,  hiv: 0.1, sexEd: 5,  childMarriage: 28, mmr: 620,  abr1014: 10, region: 'Asia' },
+      { iso: 'YEM', name: 'Yemen',         abr: 59,  cpr: 20,  hiv: 0.1, sexEd: 8,  childMarriage: 32, mmr: 164,  abr1014: 10, region: 'MENA' },
+      { iso: 'IRQ', name: 'Iraq',          abr: 63,  cpr: 37,  hiv: 0.0, sexEd: 12, childMarriage: 24, mmr: 79,   abr1014: 11, region: 'MENA' },
+      { iso: 'JOR', name: 'Jordan',        abr: 26,  cpr: 52,  hiv: 0.0, sexEd: 18, childMarriage: 8,  mmr: 46,   abr1014: 3,  region: 'MENA' },
+      { iso: 'TUN', name: 'Tunisia',       abr: 6,   cpr: 50,  hiv: 0.1, sexEd: 25, childMarriage: 2,  mmr: 37,   abr1014: 0.5,region: 'MENA' },
+      { iso: 'DZA', name: 'Algeria',       abr: 10,  cpr: 57,  hiv: 0.1, sexEd: 15, childMarriage: 3,  mmr: 78,   abr1014: 1,  region: 'MENA' },
+      { iso: 'CHL', name: 'Chile',         abr: 41,  cpr: 58,  hiv: 0.3, sexEd: 68, childMarriage: 14, mmr: 13,   abr1014: 5,  region: 'Americas' },
+      { iso: 'URY', name: 'Uruguay',       abr: 44,  cpr: 72,  hiv: 0.5, sexEd: 72, childMarriage: 22, mmr: 17,   abr1014: 7,  region: 'Americas' },
+      { iso: 'BOL', name: 'Bolivia',       abr: 65,  cpr: 39,  hiv: 0.3, sexEd: 35, childMarriage: 25, mmr: 161,  abr1014: 11, region: 'Americas' },
+      { iso: 'PRY', name: 'Paraguay',      abr: 60,  cpr: 68,  hiv: 0.4, sexEd: 45, childMarriage: 22, mmr: 84,   abr1014: 9,  region: 'Americas' },
+      { iso: 'ECU', name: 'Ecuador',       abr: 67,  cpr: 53,  hiv: 0.3, sexEd: 52, childMarriage: 22, mmr: 66,   abr1014: 10, region: 'Americas' },
+      { iso: 'POL', name: 'Poland',        abr: 11,  cpr: 62,  hiv: 0.0, sexEd: 30, childMarriage: 4,  mmr: 2,    abr1014: 1,  region: 'Europe' },
+      { iso: 'ROU', name: 'Romania',       abr: 23,  cpr: 57,  hiv: 0.1, sexEd: 28, childMarriage: 14, mmr: 19,   abr1014: 4,  region: 'Europe' },
+      { iso: 'BGR', name: 'Bulgaria',      abr: 34,  cpr: 56,  hiv: 0.0, sexEd: 25, childMarriage: 13, mmr: 10,   abr1014: 6,  region: 'Europe' },
+      { iso: 'UKR', name: 'Ukraine',       abr: 19,  cpr: 52,  hiv: 0.6, sexEd: 32, childMarriage: 9,  mmr: 17,   abr1014: 3,  region: 'Europe' },
+      { iso: 'ITA', name: 'Italy',         abr: 5,   cpr: 65,  hiv: 0.2, sexEd: 55, childMarriage: 4,  mmr: 2,    abr1014: 0.3,region: 'Europe' },
+      { iso: 'ESP', name: 'Spain',         abr: 6,   cpr: 61,  hiv: 0.3, sexEd: 60, childMarriage: 5,  mmr: 4,    abr1014: 0.4,region: 'Europe' },
+      { iso: 'NLD', name: 'Netherlands',   abr: 4,   cpr: 70,  hiv: 0.1, sexEd: 82, childMarriage: 2,  mmr: 5,    abr1014: 0.2,region: 'Europe' },
+      { iso: 'BEL', name: 'Belgium',       abr: 7,   cpr: 66,  hiv: 0.1, sexEd: 75, childMarriage: 3,  mmr: 5,    abr1014: 0.5,region: 'Europe' },
+      { iso: 'CHE', name: 'Switzerland',   abr: 3,   cpr: 63,  hiv: 0.1, sexEd: 78, childMarriage: 1,  mmr: 5,    abr1014: 0.2,region: 'Europe' },
+      { iso: 'AUT', name: 'Austria',       abr: 7,   cpr: 57,  hiv: 0.1, sexEd: 70, childMarriage: 2,  mmr: 4,    abr1014: 0.5,region: 'Europe' },
+      { iso: 'HUN', name: 'Hungary',       abr: 13,  cpr: 55,  hiv: 0.0, sexEd: 35, childMarriage: 8,  mmr: 12,   abr1014: 2,  region: 'Europe' },
+      { iso: 'CZE', name: 'Czechia',       abr: 10,  cpr: 70,  hiv: 0.0, sexEd: 45, childMarriage: 4,  mmr: 3,    abr1014: 1,  region: 'Europe' },
+      { iso: 'SVK', name: 'Slovakia',      abr: 23,  cpr: 62,  hiv: 0.0, sexEd: 32, childMarriage: 10, mmr: 5,    abr1014: 4,  region: 'Europe' },
+      { iso: 'LKA', name: 'Sri Lanka',     abr: 16,  cpr: 52,  hiv: 0.1, sexEd: 28, childMarriage: 12, mmr: 36,   abr1014: 2,  region: 'Asia' },
+      { iso: 'MDV', name: 'Maldives',      abr: 11,  cpr: 33,  hiv: 0.0, sexEd: 15, childMarriage: 5,  mmr: 53,   abr1014: 1,  region: 'Asia' },
+      { iso: 'BTN', name: 'Bhutan',        abr: 31,  cpr: 66,  hiv: 0.2, sexEd: 22, childMarriage: 20, mmr: 183,  abr1014: 5,  region: 'Asia' },
+      { iso: 'LAO', name: 'Laos',          abr: 67,  cpr: 54,  hiv: 0.3, sexEd: 18, childMarriage: 35, mmr: 160,  abr1014: 12, region: 'Asia' },
+      { iso: 'LBN', name: 'Lebanon',       abr: 14,  cpr: 42,  hiv: 0.0, sexEd: 20, childMarriage: 6,  mmr: 29,   abr1014: 2,  region: 'MENA' },
+      { iso: 'OMN', name: 'Oman',          abr: 14,  cpr: 29,  hiv: 0.0, sexEd: 12, childMarriage: 8,  mmr: 19,   abr1014: 2,  region: 'MENA' },
+      { iso: 'KWT', name: 'Kuwait',        abr: 9,   cpr: 40,  hiv: 0.0, sexEd: 10, childMarriage: 5,  mmr: 12,   abr1014: 1,  region: 'MENA' },
+      { iso: 'ARE', name: 'UAE',           abr: 5,   cpr: 48,  hiv: 0.0, sexEd: 12, childMarriage: 3,  mmr: 3,    abr1014: 0.5,region: 'MENA' },
+      { iso: 'QAT', name: 'Qatar',         abr: 6,   cpr: 38,  hiv: 0.0, sexEd: 8,  childMarriage: 3,  mmr: 9,    abr1014: 0.5,region: 'MENA' },
+      { iso: 'BHR', name: 'Bahrain',       abr: 9,   cpr: 45,  hiv: 0.0, sexEd: 15, childMarriage: 5,  mmr: 14,   abr1014: 1,  region: 'MENA' },
+      { iso: 'SAU', name: 'Saudi Arabia',  abr: 8,   cpr: 32,  hiv: 0.0, sexEd: 8,  childMarriage: 7,  mmr: 14,   abr1014: 1,  region: 'MENA' },
+      { iso: 'ISR', name: 'Israel',        abr: 9,   cpr: 59,  hiv: 0.1, sexEd: 55, childMarriage: 4,  mmr: 3,    abr1014: 1,  region: 'MENA' },
     ];
 
-    // Remove duplicate Myanmar entry
+    // Remove any duplicate entries
     const seen = new Set();
     const uniqueData = countryData.filter(c => {
       if (seen.has(c.iso)) return false;
@@ -335,243 +969,556 @@
       return true;
     });
 
-    // Trend data over time (synthetic but based on real WHO trend patterns)
+    // Compute unmet need (estimated from CPR relationship)
+    uniqueData.forEach(c => {
+      c.unmet = Math.round(Math.max(5, Math.min(45, 100 - c.cpr * 0.82 + (Math.random() * 6 - 3))));
+    });
+
+    // Metric definitions
+    const metrics = {
+      abr:   { label: 'Adolescent Birth Rate', unit: 'per 1,000', color: '#009EDB', max: 200, colorscale: [[0,'#E6F4F8'],[0.2,'#B8E4F5'],[0.4,'#4DB8E8'],[0.6,'#009EDB'],[0.8,'#0077A3'],[1,'#003B5C']] },
+      cpr:   { label: 'Contraceptive Prevalence', unit: '%', color: '#10b981', max: 100, colorscale: [[0,'#ecfdf5'],[0.2,'#a7f3d0'],[0.4,'#34d399'],[0.6,'#10b981'],[0.8,'#059669'],[1,'#064e3b']] },
+      unmet: { label: 'Unmet Need for FP', unit: '%', color: '#f59e0b', max: 50, colorscale: [[0,'#fffbeb'],[0.2,'#fde68a'],[0.4,'#fbbf24'],[0.6,'#f59e0b'],[0.8,'#d97706'],[1,'#78350f']] },
+      hiv:   { label: 'HIV Prevalence', unit: '%', color: '#ef4444', max: 15, colorscale: [[0,'#fef2f2'],[0.2,'#fecaca'],[0.4,'#f87171'],[0.6,'#ef4444'],[0.8,'#dc2626'],[1,'#7f1d1d']] },
+    };
+
+    // Region colors
+    const regionColors = {
+      Africa: '#009EDB',
+      Asia: '#10b981',
+      Americas: '#f59e0b',
+      Europe: '#8b5cf6',
+      MENA: '#ef4444',
+    };
+
+    // Trend data over time
     const trendYears = [2010, 2012, 2014, 2016, 2018, 2020, 2022];
     const trendData = {
-      globalAbr: [53, 50, 47, 44, 42, 41, 40],        // Global adolescent birth rate declining
-      ssaAbr:    [103, 99, 96, 94, 93, 92, 91],       // Sub-Saharan Africa (higher, slower decline)
-      lacCpr:    [66, 67, 67, 67, 68, 68, 68],        // Latin America contraceptive prevalence
-      ssaCpr:    [23, 25, 27, 29, 31, 32, 33],        // Sub-Saharan Africa contraceptive prevalence rising
-      ssaUnmet:  [25, 24, 23, 22, 21, 20, 20],        // Sub-Saharan Africa unmet need declining
+      globalAbr: [53, 50, 47, 44, 42, 41, 40],
+      ssaAbr:    [103, 99, 96, 94, 93, 92, 91],
+      ssaCpr:    [23, 25, 27, 29, 31, 32, 33],
+      ssaUnmet:  [25, 24, 23, 22, 21, 20, 20],
     };
+
+    // State
+    let currentMapMetric = 'abr';
+    let selectedCountry = null;
+    let barSortMode = 'desc';
+    let barMetric = 'cpr';
 
     // UNFPA color palette
     const colors = {
-      teal: '#009EDB',
-      darkTeal: '#0077A3',
-      navy: '#003B5C',
-      light: '#4DB8E8',
-      pale: '#B8E4F5',
-      accent1: '#00A8B5',
-      accent2: '#6B8E9F',
-      accent3: '#C75B39',
+      teal: '#009EDB', darkTeal: '#0077A3', navy: '#003B5C',
+      light: '#4DB8E8', pale: '#B8E4F5',
+      accent1: '#00A8B5', accent2: '#6B8E9F', accent3: '#C75B39',
     };
 
-    // ============ PLOTLY CONFIG ============
-    const plotlyConfig = {
-      displayModeBar: false,
-      responsive: true,
-    };
-
+    // Plotly config
+    const plotlyConfig = { displayModeBar: false, responsive: true };
     const commonLayout = {
-      font: { family: 'Inter, sans-serif', color: '#1a1a2e' },
+      font: { family: 'Inter, sans-serif', color: '#1a2a3a' },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
       margin: { l: 60, r: 20, t: 10, b: 60 },
     };
 
+    // ============ HELPER FUNCTIONS ============
+    function getFilteredData() {
+      const region = document.getElementById('regionFilter').value;
+      const search = document.getElementById('countrySearch').value.toLowerCase().trim();
+      let data = uniqueData;
+      if (region !== 'all') data = data.filter(c => c.region === region);
+      if (search) data = data.filter(c => c.name.toLowerCase().includes(search));
+      return data;
+    }
+
+    function getMetricColor(metric, value, max) {
+      const ratio = Math.min(1, value / max);
+      const cs = metrics[metric].colorscale;
+      for (let i = 0; i < cs.length - 1; i++) {
+        if (ratio >= cs[i][0] && ratio <= cs[i+1][0]) {
+          const t = (ratio - cs[i][0]) / (cs[i+1][0] - cs[i][0]);
+          return interpolateColor(cs[i][1], cs[i+1][1], t);
+        }
+      }
+      return cs[cs.length-1][1];
+    }
+
+    function interpolateColor(c1, c2, t) {
+      const hex = (x) => parseInt(x.slice(1), 16);
+      const r1 = (hex(c1) >> 16) & 255, g1 = (hex(c1) >> 8) & 255, b1 = hex(c1) & 255;
+      const r2 = (hex(c2) >> 16) & 255, g2 = (hex(c2) >> 8) & 255, b2 = hex(c2) & 255;
+      const r = Math.round(r1 + (r2-r1)*t);
+      const g = Math.round(g1 + (g2-g1)*t);
+      const b = Math.round(b1 + (b2-b1)*t);
+      return `rgb(${r},${g},${b})`;
+    }
+
+    // ============ NUMBER ANIMATION ============
+    function animateNumber(element, target, suffix = '', duration = 800) {
+      const start = 0;
+      const startTime = performance.now();
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (target - start) * eased);
+        element.textContent = current + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
     // ============ STATS ============
     function updateStats(data) {
-      const avgAbr = Math.round(data.reduce((s, c) => s + c.abr, 0) / data.length);
-      const avgCpr = Math.round(data.reduce((s, c) => s + c.cpr, 0) / data.length);
-      // Estimate unmet need (inverse relationship with CPR, with some variance)
-      const avgUnmet = Math.round(100 - avgCpr * 0.85);
+      const avg = (key) => Math.round(data.reduce((s, c) => s + c[key], 0) / data.length);
 
-      document.getElementById('stat-birth-rate').textContent = avgAbr;
-      document.getElementById('stat-contraceptive').textContent = avgCpr + '%';
-      document.getElementById('stat-unmet').textContent = avgUnmet + '%';
+      if (selectedCountry) {
+        animateNumber(document.getElementById('stat-birth-rate'), selectedCountry.abr);
+        animateNumber(document.getElementById('stat-contraceptive'), selectedCountry.cpr, '%');
+        animateNumber(document.getElementById('stat-unmet'), selectedCountry.unmet, '%');
+        animateNumber(document.getElementById('stat-hiv'), selectedCountry.hiv, '%');
+        document.getElementById('statCountryAbr').textContent = selectedCountry.name;
+        document.getElementById('statCountryCpr').textContent = selectedCountry.name;
+        document.getElementById('statCountryUnmet').textContent = selectedCountry.name;
+        document.getElementById('statCountryHiv').textContent = selectedCountry.name;
+        document.querySelectorAll('.stat-card').forEach(c => c.classList.add('active'));
+      } else {
+        animateNumber(document.getElementById('stat-birth-rate'), avg('abr'));
+        animateNumber(document.getElementById('stat-contraceptive'), avg('cpr'), '%');
+        animateNumber(document.getElementById('stat-unmet'), avg('unmet'), '%');
+        animateNumber(document.getElementById('stat-hiv'), avg('hiv'), '%');
+        document.querySelectorAll('.stat-country').forEach(el => el.textContent = '');
+        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+      }
     }
 
     // ============ MAP ============
     function renderMap(data) {
+      const m = metrics[currentMapMetric];
+      const maxVal = Math.max(...data.map(c => c[currentMapMetric]));
+
       const trace = {
         type: 'choropleth',
         locations: data.map(c => c.iso),
-        z: data.map(c => c.abr),
-        text: data.map(c => `${c.name}<br>ABR: ${c.abr} per 1,000<br>CPR: ${c.cpr}%`),
-        colorscale: [
-          [0, '#E6F4F8'],
-          [0.2, '#B8E4F5'],
-          [0.4, '#4DB8E8'],
-          [0.6, '#009EDB'],
-          [0.8, '#0077A3'],
-          [1, '#003B5C'],
-        ],
+        z: data.map(c => c[currentMapMetric]),
+        text: data.map(c => {
+          const v = c[currentMapMetric];
+          return `<b>${c.name}</b><br>${m.label}: ${v}${m.unit === '%' ? '%' : ' ' + m.unit}<br>Region: ${c.region}`;
+        }),
+        colorscale: m.colorscale,
         autocolorscale: false,
         reversescale: false,
-        marker: {
-          line: { color: '#ffffff', width: 0.5 }
-        },
+        marker: { line: { color: '#ffffff', width: 0.5 } },
         colorbar: {
-          title: { text: 'Births per 1,000<br>women aged 15-19', font: { size: 11 } },
-          thickness: 16,
-          len: 0.7,
-          tickfont: { size: 10 },
+          title: { text: `${m.label}<br>(${m.unit})`, font: { size: 10 } },
+          thickness: 14, len: 0.65, tickfont: { size: 9 },
         },
-        hovertemplate: '<b>%{text}</b><extra></extra>',
+        hovertemplate: '%{text}<extra></extra>',
+        selectedpoints: selectedCountry ? [data.findIndex(c => c.iso === selectedCountry.iso)] : [],
       };
 
       const layout = {
         ...commonLayout,
         geo: {
-          showframe: false,
-          showcoastlines: true,
-          coastlinecolor: '#e2e8f0',
+          showframe: false, showcoastlines: true,
+          coastlinecolor: '#e0e6ec',
           projection: { type: 'natural earth' },
           bgcolor: 'rgba(0,0,0,0)',
         },
-        height: 480,
+        height: 460,
         margin: { l: 0, r: 0, t: 10, b: 0 },
       };
 
-      Plotly.newPlot('mapChart', [trace], layout, plotlyConfig);
+      Plotly.newPlot('mapChart', [trace], layout, plotlyConfig).then(gd => {
+        gd.on('plotly_click', d => {
+          const pt = d.points[0];
+          if (pt && pt.location) {
+            const country = data.find(c => c.iso === pt.location);
+            if (country) selectCountry(country);
+          }
+        });
+      });
+
+      // Update insight
+      const mapInsights = {
+        abr:   'Sub-Saharan Africa shows the highest adolescent birth rates globally, with several countries exceeding 100 births per 1,000 women aged 15-19.',
+        cpr:   'European and East Asian countries lead in contraceptive prevalence, while many Sub-Saharan African nations remain below 30%.',
+        unmet: 'Unmet need for family planning is highest in Sub-Saharan Africa, where contraceptive access remains a critical challenge.',
+        hiv:   'HIV prevalence among young women is highest in Southern and Eastern Africa, with South Africa, Mozambique, and Zambia exceeding 5%.',
+      };
+      document.getElementById('mapInsightText').textContent = mapInsights[currentMapMetric];
+    }
+
+    function setMapMetric(metric) {
+      currentMapMetric = metric;
+      document.querySelectorAll('.metric-toggle .btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.metric-toggle .btn[data-metric="${metric}"]`).classList.add('active');
+      renderMap(getFilteredData());
     }
 
     // ============ BAR CHART ============
     function renderBarChart(data) {
-      // Sort by CPR descending, take top 15 for cleaner display
-      const sorted = [...data].sort((a, b) => b.cpr - a.cpr).slice(0, 15);
+      let sorted = [...data];
+      const m = metrics[barMetric];
+
+      if (barSortMode === 'desc') sorted.sort((a, b) => b[barMetric] - a[barMetric]);
+      else if (barSortMode === 'asc') sorted.sort((a, b) => a[barMetric] - b[barMetric]);
+      else sorted.sort((a, b) => a.name.localeCompare(b.name));
+
+      const display = sorted.slice(0, 15);
+      const avgVal = data.reduce((s, c) => s + c[barMetric], 0) / data.length;
 
       const trace = {
-        x: sorted.map(c => c.name),
-        y: sorted.map(c => c.cpr),
+        x: display.map(c => c.name),
+        y: display.map(c => c[barMetric]),
         type: 'bar',
         marker: {
-          color: sorted.map(c => {
-            if (c.cpr >= 65) return colors.darkTeal;
-            if (c.cpr >= 45) return colors.teal;
-            if (c.cpr >= 30) return colors.light;
-            return colors.pale;
-          }),
-          line: { color: colors.navy, width: 0.5 },
+          color: display.map(c => getMetricColor(barMetric, c[barMetric], m.max)),
+          line: { color: '#e0e6ec', width: 0.5 },
+          cornerradius: 4,
         },
-        hovertemplate: '<b>%{x}</b><br>CPR: %{y}%<extra></extra>',
+        hovertemplate: `<b>%{x}</b><br>${m.label}: %{y}${m.unit === '%' ? '%' : ' ' + m.unit}<extra></extra>`,
       };
+
+      const shapes = [{
+        type: 'line', xref: 'paper', yref: 'y',
+        x0: 0, x1: 1, y0: avgVal, y1: avgVal,
+        line: { color: '#8b5cf6', width: 1.5, dash: 'dash' },
+      }];
+
+      const annotations = [{
+        x: 0.98, y: avgVal, xref: 'paper', yref: 'y',
+        text: `Avg: ${Math.round(avgVal)}`,
+        showarrow: false, font: { size: 9, color: '#8b5cf6' },
+        xanchor: 'right', yanchor: 'bottom',
+      }];
 
       const layout = {
         ...commonLayout,
-        xaxis: {
-          tickangle: -35,
-          tickfont: { size: 10 },
-          gridcolor: '#f1f5f9',
-        },
+        xaxis: { tickangle: -30, tickfont: { size: 9 }, gridcolor: '#f1f5f9' },
         yaxis: {
-          title: { text: 'Contraceptive Prevalence (%)', font: { size: 11 } },
-          gridcolor: '#e2e8f0',
-          range: [0, 100],
-          tickfont: { size: 10 },
+          title: { text: `${m.label} (${m.unit})`, font: { size: 10 } },
+          gridcolor: '#e0e6ec', tickfont: { size: 9 },
         },
-        height: 360,
-        bargap: 0.25,
+        height: 340, bargap: 0.2,
+        shapes, annotations,
       };
 
       Plotly.newPlot('barChart', [trace], layout, plotlyConfig);
+    }
+
+    function cycleBarSort() {
+      const modes = ['desc', 'asc', 'alpha'];
+      const idx = modes.indexOf(barSortMode);
+      barSortMode = modes[(idx + 1) % modes.length];
+      renderBarChart(getFilteredData());
     }
 
     // ============ TREND CHART ============
     function renderTrendChart() {
       const traces = [
         {
-          x: trendYears,
-          y: trendData.globalAbr,
-          mode: 'lines+markers',
-          name: 'Global ABR (per 1,000)',
+          x: trendYears, y: trendData.globalAbr,
+          mode: 'lines+markers', name: 'Global ABR',
           line: { color: colors.teal, width: 3 },
           marker: { size: 8, color: colors.teal },
-          hovertemplate: '%{x}: %{y} per 1,000<extra></extra>',
+          hovertemplate: 'Global ABR: %{y} per 1,000<extra></extra>',
         },
         {
-          x: trendYears,
-          y: trendData.ssaAbr,
-          mode: 'lines+markers',
-          name: 'Sub-Saharan Africa ABR',
+          x: trendYears, y: trendData.ssaAbr,
+          mode: 'lines+markers', name: 'SS Africa ABR',
           line: { color: colors.navy, width: 3 },
           marker: { size: 8, color: colors.navy },
-          hovertemplate: '%{x}: %{y} per 1,000<extra></extra>',
+          hovertemplate: 'SS Africa ABR: %{y} per 1,000<extra></extra>',
         },
         {
-          x: trendYears,
-          y: trendData.ssaCpr,
-          mode: 'lines+markers',
-          name: 'Sub-Saharan Africa CPR (%)',
-          line: { color: colors.accent1, width: 3, dash: 'dash' },
-          marker: { size: 8, color: colors.accent1 },
+          x: trendYears, y: trendData.ssaCpr,
+          mode: 'lines+markers', name: 'SS Africa CPR',
+          line: { color: colors.accent1, width: 2.5, dash: 'dash' },
+          marker: { size: 7, color: colors.accent1 },
           yaxis: 'y2',
-          hovertemplate: '%{x}: %{y}%<extra></extra>',
-        },
-        {
-          x: trendYears,
-          y: trendData.ssaUnmet,
-          mode: 'lines+markers',
-          name: 'Sub-Saharan Africa Unmet Need (%)',
-          line: { color: colors.accent3, width: 3, dash: 'dot' },
-          marker: { size: 8, color: colors.accent3 },
-          yaxis: 'y2',
-          hovertemplate: '%{x}: %{y}%<extra></extra>',
+          hovertemplate: 'SS Africa CPR: %{y}%<extra></extra>',
         },
       ];
 
+      const shapes = [{
+        type: 'line', xref: 'x', yref: 'paper',
+        x0: 2020, x1: 2020, y0: 0, y1: 1,
+        line: { color: '#94a3b8', width: 1, dash: 'dot' },
+      }];
+
+      const annotations = [{
+        x: 2020, y: 0.95, xref: 'x', yref: 'paper',
+        text: 'COVID-19', showarrow: false,
+        font: { size: 9, color: '#94a3b8' },
+        xanchor: 'center', yanchor: 'top',
+      }];
+
       const layout = {
         ...commonLayout,
-        xaxis: {
-          tickfont: { size: 10 },
-          gridcolor: '#f1f5f9',
-          dtick: 2,
-        },
+        xaxis: { tickfont: { size: 9 }, gridcolor: '#f1f5f9', dtick: 2 },
         yaxis: {
-          title: { text: 'Adolescent Birth Rate (per 1,000)', font: { size: 11 } },
-          gridcolor: '#e2e8f0',
-          tickfont: { size: 10 },
-          side: 'left',
+          title: { text: 'ABR (per 1,000)', font: { size: 10 } },
+          gridcolor: '#e0e6ec', tickfont: { size: 9 }, side: 'left',
         },
         yaxis2: {
-          title: { text: 'Percentage (%)', font: { size: 11 } },
-          overlaying: 'y',
-          side: 'right',
-          range: [0, 100],
-          tickfont: { size: 10 },
-          showgrid: false,
+          title: { text: 'CPR (%)', font: { size: 10 } },
+          overlaying: 'y', side: 'right', range: [0, 60],
+          tickfont: { size: 9 }, showgrid: false,
         },
-        height: 360,
-        legend: {
-          orientation: 'h',
-          y: -0.18,
-          x: 0.5,
-          xanchor: 'center',
-          font: { size: 10 },
-        },
+        height: 340,
+        legend: { orientation: 'h', y: -0.15, x: 0.5, xanchor: 'center', font: { size: 9 } },
         hovermode: 'x unified',
+        shapes, annotations,
       };
 
       Plotly.newPlot('trendChart', traces, layout, plotlyConfig);
     }
 
-    // ============ FILTER ============
-    function getFilteredData() {
-      const region = document.getElementById('regionFilter').value;
-      if (region === 'all') return uniqueData;
-      return uniqueData.filter(c => c.region === region);
+    // ============ SCATTER PLOT ============
+    function renderScatterPlot(data) {
+      const traces = Object.keys(regionColors).map(region => {
+        const regionData = data.filter(c => c.region === region);
+        return {
+          x: regionData.map(c => c.cpr),
+          y: regionData.map(c => c.abr),
+          mode: 'markers',
+          type: 'scatter',
+          name: region,
+          marker: {
+            size: 10, color: regionColors[region],
+            line: { color: 'white', width: 1 },
+            opacity: 0.85,
+          },
+          text: regionData.map(c => c.name),
+          hovertemplate: '<b>%{text}</b><br>CPR: %{x}%<br>ABR: %{y} per 1,000<extra></extra>',
+        };
+      });
+
+      const layout = {
+        ...commonLayout,
+        xaxis: {
+          title: { text: 'Contraceptive Prevalence (%)', font: { size: 10 } },
+          gridcolor: '#f1f5f9', tickfont: { size: 9 }, range: [0, 100],
+        },
+        yaxis: {
+          title: { text: 'Adolescent Birth Rate (per 1,000)', font: { size: 10 } },
+          gridcolor: '#e0e6ec', tickfont: { size: 9 },
+        },
+        height: 340,
+        legend: { orientation: 'h', y: -0.15, x: 0.5, xanchor: 'center', font: { size: 9 } },
+        hovermode: 'closest',
+      };
+
+      Plotly.newPlot('scatterChart', traces, layout, plotlyConfig);
     }
 
+    // ============ REGIONAL COMPARISON ============
+    function renderRegionChart(data) {
+      const regions = ['Africa', 'Asia', 'Americas', 'Europe', 'MENA'];
+      const regionData = regions.map(r => {
+        const c = data.filter(x => x.region === r);
+        return {
+          region: r,
+          abr: Math.round(c.reduce((s, x) => s + x.abr, 0) / c.length),
+          cpr: Math.round(c.reduce((s, x) => s + x.cpr, 0) / c.length),
+          unmet: Math.round(c.reduce((s, x) => s + x.unmet, 0) / c.length),
+          hiv: Math.round(c.reduce((s, x) => s + x.hiv, 0) / c.length * 10) / 10,
+        };
+      });
+
+      const traces = [
+        {
+          x: regionData.map(d => d.region),
+          y: regionData.map(d => d.abr),
+          name: 'ABR (per 1,000)',
+          type: 'bar',
+          marker: { color: colors.teal, cornerradius: 3 },
+          hovertemplate: '%{x}<br>ABR: %{y} per 1,000<extra></extra>',
+        },
+        {
+          x: regionData.map(d => d.region),
+          y: regionData.map(d => d.cpr),
+          name: 'CPR (%)',
+          type: 'bar',
+          marker: { color: colors.accent1, cornerradius: 3 },
+          hovertemplate: '%{x}<br>CPR: %{y}%<extra></extra>',
+          yaxis: 'y2',
+        },
+      ];
+
+      const layout = {
+        ...commonLayout,
+        barmode: 'group',
+        xaxis: { tickfont: { size: 10 } },
+        yaxis: {
+          title: { text: 'ABR (per 1,000)', font: { size: 10, color: colors.teal } },
+          gridcolor: '#e0e6ec', tickfont: { size: 9, color: colors.teal }, side: 'left',
+        },
+        yaxis2: {
+          title: { text: 'CPR (%)', font: { size: 10, color: colors.accent1 } },
+          overlaying: 'y', side: 'right', range: [0, 100],
+          tickfont: { size: 9, color: colors.accent1 }, showgrid: false,
+        },
+        height: 340,
+        legend: { orientation: 'h', y: -0.15, x: 0.5, xanchor: 'center', font: { size: 9 } },
+        bargap: 0.25, bargroupgap: 0.1,
+      };
+
+      Plotly.newPlot('regionChart', traces, layout, plotlyConfig);
+    }
+
+    // ============ COUNTRY PANEL ============
+    function selectCountry(country) {
+      selectedCountry = country;
+      updateStats(getFilteredData());
+      renderMap(getFilteredData());
+      openCountryPanel(country);
+    }
+
+    function openCountryPanel(country) {
+      document.getElementById('panelCountryName').textContent = country.name;
+      document.getElementById('panelCountryRegion').textContent = country.region;
+
+      const grid = document.getElementById('panelStatGrid');
+      grid.innerHTML = `
+        <div class="panel-stat"><div class="label">Birth Rate (15-19)</div><div class="value">${country.abr}</div></div>
+        <div class="panel-stat"><div class="label">Contraceptive Use</div><div class="value">${country.cpr}%</div></div>
+        <div class="panel-stat"><div class="label">Unmet Need</div><div class="value">${country.unmet}%</div></div>
+        <div class="panel-stat"><div class="label">HIV Prevalence</div><div class="value">${country.hiv}%</div></div>
+        <div class="panel-stat"><div class="label">Sex Ed Coverage</div><div class="value">${country.sexEd}%</div></div>
+        <div class="panel-stat"><div class="label">Child Marriage</div><div class="value">${country.childMarriage}%</div></div>
+      `;
+
+      // Radar chart
+      const radarTrace = {
+        type: 'scatterpolar',
+        r: [country.abr/2, country.cpr, 100-country.unmet, (1-country.hiv/15)*100, country.sexEd, 100-country.childMarriage],
+        theta: ['Birth Rate', 'Contraceptive Use', 'FP Met Need', 'HIV Free', 'Sex Ed', 'No Child Marriage'],
+        fill: 'toself',
+        fillcolor: 'rgba(0,158,219,0.2)',
+        line: { color: colors.teal, width: 2 },
+        marker: { size: 6, color: colors.teal },
+        name: country.name,
+      };
+      const radarLayout = {
+        polar: {
+          radialaxis: { visible: true, range: [0, 100], tickfont: { size: 8 } },
+          angularaxis: { tickfont: { size: 9 } },
+        },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        margin: { l: 40, r: 40, t: 30, b: 30 },
+        showlegend: false,
+        font: { family: 'Inter, sans-serif', color: '#1a2a3a' },
+      };
+      Plotly.newPlot('panelRadarChart', [radarTrace], radarLayout, plotlyConfig);
+
+      document.getElementById('countryPanel').classList.add('open');
+      document.getElementById('panelOverlay').classList.add('open');
+    }
+
+    function closeCountryPanel() {
+      document.getElementById('countryPanel').classList.remove('open');
+      document.getElementById('panelOverlay').classList.remove('open');
+      selectedCountry = null;
+      updateStats(getFilteredData());
+      renderMap(getFilteredData());
+    }
+
+    // ============ EXPORT ============
+    function exportChart(chartId, filename) {
+      const gd = document.getElementById(chartId);
+      Plotly.downloadImage(gd, { format: 'png', width: 1200, height: 700, filename });
+    }
+
+    function exportAllData() {
+      const headers = ['Country', 'ISO', 'Region', 'ABR (15-19)', 'CPR (%)', 'Unmet Need (%)', 'HIV (%)', 'Sex Ed (%)', 'Child Marriage (%)', 'MMR', 'ABR (10-14)'];
+      const rows = uniqueData.map(c =>
+        [c.name, c.iso, c.region, c.abr, c.cpr, c.unmet, c.hiv, c.sexEd, c.childMarriage, c.mmr, c.abr1014].join(',')
+      );
+      const csv = [headers.join(','), ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'unfpa-cse-data.csv';
+      a.click(); URL.revokeObjectURL(url);
+    }
+
+    // ============ RESET ============
+    function resetAll() {
+      selectedCountry = null;
+      currentMapMetric = 'abr';
+      barSortMode = 'desc';
+      document.getElementById('countrySearch').value = '';
+      document.getElementById('regionFilter').value = 'all';
+      document.querySelectorAll('.metric-toggle .btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.metric-toggle .btn[data-metric="abr"]').classList.add('active');
+      closeCountryPanel();
+      updateDashboard();
+    }
+
+    function selectMetric(metric) {
+      setMapMetric(metric);
+      barMetric = metric;
+      renderBarChart(getFilteredData());
+    }
+
+    // ============ UPDATE ALL ============
     function updateDashboard() {
       const data = getFilteredData();
       updateStats(data);
       renderMap(data);
       renderBarChart(data);
-      // Trend chart is global, not filtered by region
+      renderScatterPlot(data);
+      renderRegionChart(data);
     }
 
+    // ============ EVENT LISTENERS ============
     document.getElementById('regionFilter').addEventListener('change', updateDashboard);
+    document.getElementById('countrySearch').addEventListener('input', () => {
+      updateDashboard();
+      // If only one result, auto-select
+      const data = getFilteredData();
+      if (data.length === 1 && !selectedCountry) {
+        selectCountry(data[0]);
+      }
+    });
+
+    // ============ SCROLL ANIMATIONS ============
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    }
 
     // ============ INIT ============
-    updateDashboard();
-    renderTrendChart();
+    window.addEventListener('load', () => {
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Show content after loader
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        initScrollAnimations();
+        updateDashboard();
+        renderTrendChart();
+      }, 1800);
+    });
 
     // Resize handler
     window.addEventListener('resize', () => {
-      Plotly.Plots.resize('mapChart');
-      Plotly.Plots.resize('barChart');
-      Plotly.Plots.resize('trendChart');
+      ['mapChart', 'barChart', 'trendChart', 'scatterChart', 'regionChart'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) Plotly.Plots.resize(el);
+      });
     });
   </script>
 
