@@ -113,8 +113,7 @@ unfpa-cse-dashboard/
 ├── dashboard.html    # Complete single-file dashboard (~1,500 lines)
 │                     # — data, styles, and JS all inline
 ├── README.md         # Project documentation
-├── LICENSE           # MIT License + data usage note
-└── RESUME_DESCRIPTION.md  # Resume copy templates
+└── LICENSE           # MIT License + data usage note
 ```
 
 ---
