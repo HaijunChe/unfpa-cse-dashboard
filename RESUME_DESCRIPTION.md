@@ -18,9 +18,19 @@
 - 技术栈：Plotly.js (可视化) + Lucide Icons + 纯原生 JavaScript
 - 部署：GitHub Pages，零构建工具，单文件 1250+ 行代码
 
-## 方案三：一句话版（适合表格或紧凑布局）
+## 方案三：UNFPA 定向版（适合申请 UNFPA/国际组织岗位）
 
-**数据可视化仪表盘** — 75 国健康指标交互式分析，5 种图表类型，GitHub Pages 部署，[查看](https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html)
+**UNFPA CSE 项目 — 青少年生殖健康数据仪表盘**
+> 为 UNFPA 综合性教育（Comprehensive Sexuality Education）项目设计的数据可视化 Demo，展示全球 75 个国家在青少年性与生殖健康领域的核心指标。
+
+- **数据覆盖**：从 WHO Global Health Observatory、UNFPA State of World Population、UNAIDS 等官方数据源收集并结构化 10 项关键指标
+- **可视化设计**：5 种交互式图表（世界地图、趋势分析、区域对比、相关性散点图、国家雷达图），支持 4 项指标的动态切换
+- **交互体验**：国家搜索、区域筛选、点击联动详情面板、CSV 数据导出，完整响应式布局
+- **技术实现**：纯前端技术栈（HTML/CSS/JavaScript + Plotly.js），零构建工具，单文件部署于 GitHub Pages
+
+## 方案四：一句话版（适合表格或紧凑布局）
+
+**UNFPA CSE 数据仪表盘** — 75 国青少年 SRH 指标可视化 Demo，5 种图表类型，GitHub Pages 部署，[查看](https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html)
 
 ---
 
