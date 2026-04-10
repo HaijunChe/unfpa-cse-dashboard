@@ -2,10 +2,38 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Dashboard-009EDB?style=flat-square)](https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html)
 [![Data Source](https://img.shields.io/badge/Data-WHO%20%7C%20UNFPA%20%7C%20UNAIDS-0077A3?style=flat-square)](https://www.who.int/data/gho)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 An interactive data visualization dashboard for monitoring adolescent sexual and reproductive health indicators across countries worldwide. Built with vanilla HTML/CSS/JavaScript — no build tools required.
 
 [View Live Dashboard](https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html)
+
+---
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Live Demo](#live-demo)
+- [Features](#features)
+- [Data](#data)
+- [Tech Stack](#tech-stack--tools)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Screenshots](#screenshots)
+- [License](#license)
+
+---
+
+## Overview
+
+This dashboard visualizes **75 countries** across **10 key SRH indicators**, including adolescent birth rates, contraceptive prevalence, HIV trends, and comprehensive sexuality education coverage. It is designed as a demonstration project for UNFPA's Comprehensive Sexuality Education (CSE) programme.
+
+**Key highlights:**
+- 6 interactive chart types (choropleth map, trend lines, scatter plot, regional comparison, radar chart)
+- 6 interactive features (metric switching, country search, region filter, detail panel, CSV export, sorting)
+- UNFPA-branded UI with official logo, navigation bar, and color scheme
+- Full Python data pipeline for ETL and analysis
+- Zero build tools — deploys instantly to GitHub Pages
 
 ---
 
@@ -134,6 +162,40 @@ unfpa-cse-dashboard/
 │   └── README.md               # Data pipeline documentation
 ├── README.md                   # Project documentation
 └── LICENSE                     # MIT License + data usage note
+```
+
+---
+
+## Screenshots
+
+> **Note:** To add a screenshot, open the [live dashboard](https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html), press `F12` → device toolbar → select "Laptop with HiDPI" → take a screenshot of the full page. Save it as `screenshots/dashboard-preview.png` and the image will appear below.
+
+### Dashboard Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  [UNFPA Logo]  United Nations Population Fund    Who|What|Data│
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│     Adolescent Sexual & Reproductive Health                │
+│     Global CSE Data Dashboard — UNFPA CSE Programme        │
+│     [Explore Data]  [Visit UNFPA.org]                      │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│  [ABR 47]  [CPR 47%]  [Unmet 24%]  [HIV 1.2%]            │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────────────────────┐  ┌──────────────────────────┐│
+│  │     🌍 Global Map        │  │  📊 Country Ranking      ││
+│  │   (Choropleth)           │  │   (Bar Chart)            ││
+│  └──────────────────────────┘  └──────────────────────────┘│
+│  ┌──────────────────────────┐  ┌──────────────────────────┐│
+│  │    📈 Trends Over Time   │  │  🔗 Relationship Analysis ││
+│  │   (Line Chart)           │  │   (Scatter Plot)         ││
+│  └──────────────────────────┘  └──────────────────────────┘│
+│  ┌───────────────────────────────────────────────────────┐│
+│  │              🌐 Regional Comparison                   ││
+│  └───────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
