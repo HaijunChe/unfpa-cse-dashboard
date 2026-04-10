@@ -234,13 +234,62 @@
       padding: 80px 40px 100px;
       overflow: hidden;
     }
-    .hero::before {
+    /* Scrolling background images */
+    .hero-bg-container {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.15;
+    }
+    .hero-bg-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      animation: heroBgSlide 24s infinite ease-in-out;
+    }
+    .hero-bg-slide:nth-child(1) {
+      background-image: url("https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1920&q=80");
+      animation-delay: 0s;
+    }
+    .hero-bg-slide:nth-child(2) {
+      background-image: url("https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=1920&q=80");
+      animation-delay: 8s;
+      opacity: 0;
+    }
+    .hero-bg-slide:nth-child(3) {
+      background-image: url("https://images.unsplash.com/photo-1529390079861-591da014bde6?w=1920&q=80");
+      animation-delay: 16s;
+      opacity: 0;
+    }
+    @keyframes heroBgSlide {
+      0%   { opacity: 0; transform: scale(1.05); }
+      8%   { opacity: 1; transform: scale(1); }
+      33%  { opacity: 1; transform: scale(1); }
+      41%  { opacity: 0; transform: scale(1.02); }
+      100% { opacity: 0; transform: scale(1.05); }
+    }
+    /* Slow pan overlay */
+    .hero-bg-pan {
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(0,95,115,0.3) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 50%, rgba(0,61,79,0.4) 0%, transparent 60%);
+      animation: heroBgPan 30s linear infinite;
+      z-index: 0;
+    }
+    @keyframes heroBgPan {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      50%  { transform: translate(2%, 1%) rotate(0.5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    /* Gradient overlay on top of images */
+    .hero::after {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 500'%3E%3Cpath fill='%23ffffff' fill-opacity='0.06' d='M150,250 Q200,200 250,250 T350,250 T450,250 T550,250 T650,250 T750,250 T850,250' stroke='none'/%3E%3Cpath fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='0.5' d='M50,100 L950,100 M50,200 L950,200 M50,300 L950,300 M50,400 L950,400'/%3E%3Ccircle cx='200' cy='150' r='60' fill='%23ffffff' fill-opacity='0.03'/%3E%3Ccircle cx='800' cy='350' r='80' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/svg%3E");
-      background-size: cover;
-      background-position: center;
+      background: linear-gradient(160deg, rgba(0,95,115,0.85) 0%, rgba(0,74,90,0.9) 40%, rgba(0,61,79,0.92) 100%);
+      z-index: 0;
       pointer-events: none;
     }
     .hero-inner {
@@ -781,7 +830,10 @@
     .footer-brand img {
       height: 40px;
       width: auto;
-      filter: brightness(0) invert(1);
+      filter: grayscale(100%) brightness(0) invert(1) drop-shadow(0 0 0 white);
+      background: white;
+      padding: 4px 8px;
+      border-radius: 4px;
     }
     .footer-brand-text {
       font-size: 0.75rem;
@@ -824,6 +876,256 @@
     .footer-copyright {
       font-size: 0.75rem;
       color: rgba(255,255,255,0.35);
+    }
+
+    /* ============ CAMPAIGNS CAROUSEL ============ */
+    .campaigns-section {
+      padding: 60px 40px;
+      background: linear-gradient(180deg, #f0f4f8 0%, #e8eef5 100%);
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 600px) {
+      .campaigns-section { padding: 40px 20px; }
+    }
+    .campaigns-header {
+      max-width: 1200px;
+      margin: 0 auto 32px;
+    }
+    .campaigns-header h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--unfpa-navy);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 12px;
+      border-left: 3px solid var(--unfpa-orange);
+    }
+    .campaigns-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+    .campaigns-carousel {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .campaigns-track {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      padding: 8px 4px 24px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--unfpa-teal) transparent;
+    }
+    .campaigns-track::-webkit-scrollbar {
+      height: 6px;
+    }
+    .campaigns-track::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .campaigns-track::-webkit-scrollbar-thumb {
+      background: var(--unfpa-teal);
+      border-radius: 3px;
+    }
+    .campaign-card {
+      flex: 0 0 300px;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      scroll-snap-align: start;
+    }
+    .campaign-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+    .campaign-card-img {
+      width: 100%;
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .campaign-card-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,59,92,0.6) 100%);
+    }
+    .campaign-card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--unfpa-orange);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      z-index: 1;
+    }
+    .campaign-card-body {
+      padding: 18px 20px 20px;
+    }
+    .campaign-card-body h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--unfpa-navy);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .campaign-card-body p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .campaign-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--unfpa-teal);
+      text-decoration: none;
+    }
+    .campaign-card-link:hover {
+      color: var(--unfpa-dark-teal);
+    }
+    .campaigns-nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .campaigns-nav-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .campaigns-nav-btn:hover {
+      border-color: var(--unfpa-teal);
+      color: var(--unfpa-teal);
+      background: var(--unfpa-light);
+    }
+    /* Campaign detail modal */
+    .campaign-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .campaign-modal.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .campaign-modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,59,92,0.5);
+      backdrop-filter: blur(4px);
+    }
+    .campaign-modal-content {
+      position: relative;
+      background: white;
+      border-radius: var(--radius);
+      max-width: 640px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,59,92,0.2);
+      transform: translateY(20px);
+      transition: transform 0.3s;
+    }
+    .campaign-modal.open .campaign-modal-content {
+      transform: translateY(0);
+    }
+    .campaign-modal-img {
+      width: 100%;
+      height: 220px;
+      background-size: cover;
+      background-position: center;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .campaign-modal-body {
+      padding: 28px 32px 32px;
+    }
+    .campaign-modal-body h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--unfpa-navy);
+      margin-bottom: 12px;
+    }
+    .campaign-modal-body p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .campaign-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.95);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    .campaign-modal-close:hover {
+      background: white;
+      color: var(--coral);
+    }
+    .campaign-modal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--unfpa-teal);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .campaign-modal-btn:hover {
+      background: var(--unfpa-dark-teal);
     }
 
     /* ============ RESPONSIVE ============ */
@@ -885,6 +1187,13 @@
 
   <!-- Hero -->
   <section class="hero" id="hero">
+    <!-- Scrolling background images -->
+    <div class="hero-bg-container">
+      <div class="hero-bg-slide"></div>
+      <div class="hero-bg-slide"></div>
+      <div class="hero-bg-slide"></div>
+    </div>
+    <div class="hero-bg-pan"></div>
     <div class="hero-inner">
       <div class="hero-badge">
         <i data-lucide="award" style="width:13px;height:13px;"></i>
@@ -1085,6 +1394,90 @@
   </div>
 
   </section>
+
+  <!-- Campaigns Carousel -->
+  <section class="campaigns-section fade-up">
+    <div class="campaigns-header">
+      <h2><i data-lucide="megaphone" style="width:20px;height:20px;color:var(--unfpa-orange);"></i> All Campaigns</h2>
+      <p>Explore UNFPA's global initiatives on adolescent health, education, and empowerment across regions.</p>
+    </div>
+    <div class="campaigns-carousel">
+      <div class="campaigns-track" id="campaignsTrack">
+        <div class="campaign-card" onclick="openCampaignModal(0)">
+          <div class="campaign-card-img" style="background-image:url('https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600&q=80')">
+            <span class="campaign-card-badge">Global</span>
+          </div>
+          <div class="campaign-card-body">
+            <h3>Comprehensive Sexuality Education</h3>
+            <p>Empowering young people with age-appropriate information on sexual and reproductive health across 75 countries.</p>
+            <span class="campaign-card-link">Learn more <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></span>
+          </div>
+        </div>
+        <div class="campaign-card" onclick="openCampaignModal(1)">
+          <div class="campaign-card-img" style="background-image:url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80')">
+            <span class="campaign-card-badge">Africa</span>
+          </div>
+          <div class="campaign-card-body">
+            <h3>Ending Child Marriage</h3>
+            <p>Working with communities to delay marriage and keep girls in school, targeting the 76 million child brides in Africa.</p>
+            <span class="campaign-card-link">Learn more <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></span>
+          </div>
+        </div>
+        <div class="campaign-card" onclick="openCampaignModal(2)">
+          <div class="campaign-card-img" style="background-image:url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=600&q=80')">
+            <span class="campaign-card-badge">Youth</span>
+          </div>
+          <div class="campaign-card-body">
+            <h3>Youth Leadership Programme</h3>
+            <p>Building a generation of young leaders who advocate for SRH rights and gender equality in their communities.</p>
+            <span class="campaign-card-link">Learn more <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></span>
+          </div>
+        </div>
+        <div class="campaign-card" onclick="openCampaignModal(3)">
+          <div class="campaign-card-img" style="background-image:url('https://images.unsplash.com/photo-1584515933487-779824d29309?w=600&q=80')">
+            <span class="campaign-card-badge">Health</span>
+          </div>
+          <div class="campaign-card-body">
+            <h3>Contraceptive Access 2030</h3>
+            <p>Ensuring universal access to modern contraception, with a focus on reaching the 257 million women with unmet need.</p>
+            <span class="campaign-card-link">Learn more <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></span>
+          </div>
+        </div>
+        <div class="campaign-card" onclick="openCampaignModal(4)">
+          <div class="campaign-card-img" style="background-image:url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80')">
+            <span class="campaign-card-badge">Emergency</span>
+          </div>
+          <div class="campaign-card-body">
+            <h3>Humanitarian Response</h3>
+            <p>Providing life-saving SRH services and gender-based violence protection in crisis settings worldwide.</p>
+            <span class="campaign-card-link">Learn more <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="campaigns-nav">
+        <button class="campaigns-nav-btn" onclick="scrollCampaigns(-1)" aria-label="Previous"><i data-lucide="chevron-left" style="width:16px;height:16px;"></i></button>
+        <button class="campaigns-nav-btn" onclick="scrollCampaigns(1)" aria-label="Next"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Campaign Modal -->
+  <div class="campaign-modal" id="campaignModal">
+    <div class="campaign-modal-overlay" onclick="closeCampaignModal()"></div>
+    <div class="campaign-modal-content">
+      <button class="campaign-modal-close" onclick="closeCampaignModal()" aria-label="Close">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+      <div class="campaign-modal-img" id="campaignModalImg" style="background-image:url('')"></div>
+      <div class="campaign-modal-body">
+        <h2 id="campaignModalTitle"></h2>
+        <p id="campaignModalDesc"></p>
+        <a href="https://www.unfpa.org" target="_blank" class="campaign-modal-btn">
+          Visit UNFPA.org <i data-lucide="external-link" style="width:14px;height:14px;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="footer">
@@ -1684,6 +2077,63 @@
       updateStats(getFilteredData());
       renderMap(getFilteredData());
     }
+
+    // ============ CAMPAIGNS CAROUSEL ============
+    const campaignData = [
+      {
+        title: "Comprehensive Sexuality Education",
+        desc: "UNFPA's flagship programme providing age-appropriate, culturally relevant sexuality education to adolescents and young people. The programme reaches over 20 million young people annually across 75 countries, equipping them with knowledge and skills to make informed decisions about their bodies, relationships, and futures.",
+        img: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=800&q=80",
+      },
+      {
+        title: "Ending Child Marriage",
+        desc: "Working hand-in-hand with communities, religious leaders, and governments to delay marriage and keep girls in school. Currently, 640 million women alive today were married before age 18. UNFPA aims to eliminate child marriage by 2030 through education, economic empowerment, and legal reform.",
+        img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
+      },
+      {
+        title: "Youth Leadership Programme",
+        desc: "Building a generation of young advocates who champion sexual and reproductive health rights. The programme trains youth leaders in advocacy, public speaking, and community mobilization, creating a sustainable pipeline of champions for gender equality and SRH access.",
+        img: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=800&q=80",
+      },
+      {
+        title: "Contraceptive Access 2030",
+        desc: "Ensuring universal access to modern contraception is a cornerstone of UNFPA's mandate. With 257 million women globally having an unmet need for family planning, this initiative works to expand access to safe, effective, and affordable contraceptive methods in the world's most underserved regions.",
+        img: "https://images.unsplash.com/photo-1584515933487-779824d29309?w=800&q=80",
+      },
+      {
+        title: "Humanitarian Response",
+        desc: "In crisis settings — from conflict zones to natural disasters — UNFPA provides life-saving sexual and reproductive health services, distributes dignity kits, establishes safe spaces for women and girls, and ensures access to emergency obstetric care and gender-based violence protection services.",
+        img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80",
+      },
+    ];
+
+    function scrollCampaigns(direction) {
+      const track = document.getElementById('campaignsTrack');
+      const cardWidth = 320; // card width + gap
+      track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    }
+
+    function openCampaignModal(index) {
+      const data = campaignData[index];
+      document.getElementById('campaignModalTitle').textContent = data.title;
+      document.getElementById('campaignModalDesc').textContent = data.desc;
+      document.getElementById('campaignModalImg').style.backgroundImage = `url('${data.img}')`;
+      document.getElementById('campaignModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCampaignModal() {
+      document.getElementById('campaignModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCampaignModal();
+        closeCountryPanel();
+      }
+    });
 
     // ============ EXPORT ============
     function exportChart(chartId, filename) {
