@@ -168,35 +168,11 @@ unfpa-cse-dashboard/
 
 ## Screenshots
 
-> **Note:** To add a screenshot, open the [live dashboard](https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html), press `F12` → device toolbar → select "Laptop with HiDPI" → take a screenshot of the full page. Save it as `screenshots/dashboard-preview.png` and the image will appear below.
-
 ### Dashboard Overview
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  [UNFPA Logo]  United Nations Population Fund    Who|What|Data│
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│     Adolescent Sexual & Reproductive Health                │
-│     Global CSE Data Dashboard — UNFPA CSE Programme        │
-│     [Explore Data]  [Visit UNFPA.org]                      │
-│                                                             │
-├─────────────────────────────────────────────────────────────┤
-│  [ABR 47]  [CPR 47%]  [Unmet 24%]  [HIV 1.2%]            │
-├─────────────────────────────────────────────────────────────┤
-│  ┌──────────────────────────┐  ┌──────────────────────────┐│
-│  │     🌍 Global Map        │  │  📊 Country Ranking      ││
-│  │   (Choropleth)           │  │   (Bar Chart)            ││
-│  └──────────────────────────┘  └──────────────────────────┘│
-│  ┌──────────────────────────┐  ┌──────────────────────────┐│
-│  │    📈 Trends Over Time   │  │  🔗 Relationship Analysis ││
-│  │   (Line Chart)           │  │   (Scatter Plot)         ││
-│  └──────────────────────────┘  └──────────────────────────┘│
-│  ┌───────────────────────────────────────────────────────┐│
-│  │              🌐 Regional Comparison                   ││
-│  └───────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────┘
-```
+<img src="screenshots/dashboard-preview.png" alt="UNFPA CSE Dashboard Screenshot" width="100%">
+
+The dashboard features a UNFPA-branded navigation bar, cinematic hero section with gradient background, four KPI stat cards, interactive world map with metric switching, country ranking bar chart, trends over time line chart, relationship analysis scatter plot, and regional comparison grouped bar chart — all styled with UNFPA teal and orange brand colors.
 
 ---
 
