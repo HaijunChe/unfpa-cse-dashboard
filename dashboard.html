@@ -283,12 +283,12 @@
       50%  { transform: translate(2%, 1%) rotate(0.5deg); }
       100% { transform: translate(0, 0) rotate(0deg); }
     }
-    /* Gradient overlay on top of images - UNFPA style dark overlay */
+    /* Gradient overlay on top of images - light overlay to keep images visible */
     .hero::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(160deg, rgba(26,58,92,0.75) 0%, rgba(13,33,55,0.85) 40%, rgba(6,21,32,0.92) 100%);
+      background: linear-gradient(160deg, rgba(0,30,60,0.55) 0%, rgba(0,20,40,0.65) 50%, rgba(0,10,25,0.75) 100%);
       z-index: 0;
       pointer-events: none;
     }
@@ -397,20 +397,30 @@
       background: var(--bg-card);
       border-radius: var(--radius);
       padding: 22px 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
       border: 1px solid var(--border);
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
       position: relative;
       overflow: hidden;
       cursor: pointer;
     }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--unfpa-teal);
+      opacity: 0.8;
+    }
     .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.04);
       border-color: var(--unfpa-teal);
     }
     .stat-card.active {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 0 0 1px var(--unfpa-teal);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 0 0 2px var(--unfpa-teal);
     }
 
     .stat-header {
@@ -611,15 +621,29 @@
       background: var(--bg-card);
       border-radius: var(--radius);
       padding: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
       border: 1px solid var(--border);
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
       position: relative;
     }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--unfpa-teal);
+      border-radius: var(--radius) var(--radius) 0 0;
+      opacity: 0.6;
+    }
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.04);
       border-color: var(--unfpa-teal);
+    }
+    .card:hover::before {
+      opacity: 1;
     }
     .card.full-width { grid-column: 1 / -1; }
 
@@ -931,15 +955,15 @@
       background: var(--bg-card);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
       border: 1px solid var(--border);
       cursor: pointer;
       transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
       scroll-snap-align: start;
     }
     .campaign-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.04);
       border-color: var(--unfpa-teal);
     }
     .campaign-card-img {
