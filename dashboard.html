@@ -234,19 +234,19 @@
       padding: 80px 40px 100px;
       overflow: hidden;
     }
-    /* Scrolling background images */
+    /* Scrolling background images — Ken Burns style */
     .hero-bg-container {
       position: absolute;
       inset: 0;
       z-index: 0;
-      opacity: 0.15;
     }
     .hero-bg-slide {
       position: absolute;
-      inset: 0;
+      inset: -5%;
       background-size: cover;
       background-position: center;
       animation: heroBgSlide 24s infinite ease-in-out;
+      filter: brightness(0.7) saturate(0.85);
     }
     .hero-bg-slide:nth-child(1) {
       background-image: url("https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1920&q=80");
@@ -263,11 +263,11 @@
       opacity: 0;
     }
     @keyframes heroBgSlide {
-      0%   { opacity: 0; transform: scale(1.05); }
-      8%   { opacity: 1; transform: scale(1); }
-      33%  { opacity: 1; transform: scale(1); }
-      41%  { opacity: 0; transform: scale(1.02); }
-      100% { opacity: 0; transform: scale(1.05); }
+      0%   { opacity: 0; transform: scale(1.08) translate(0, 0); }
+      10%  { opacity: 1; transform: scale(1.05) translate(-1%, 0.5%); }
+      33%  { opacity: 1; transform: scale(1.02) translate(-2%, 1%); }
+      41%  { opacity: 0; transform: scale(1.0) translate(-3%, 1.5%); }
+      100% { opacity: 0; transform: scale(1.08) translate(0, 0); }
     }
     /* Slow pan overlay */
     .hero-bg-pan {
@@ -428,17 +428,18 @@
       margin-bottom: 12px;
     }
     .stat-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: var(--radius-xs);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    .stat-icon.teal { background: var(--unfpa-light); color: var(--unfpa-teal); }
-    .stat-icon.amber { background: #fff7e6; color: var(--amber); }
-    .stat-icon.coral { background: #fef2f2; color: var(--coral); }
-    .stat-icon.green { background: #ecfdf5; color: var(--green); }
+    .stat-icon.teal { background: linear-gradient(135deg, #E6F4F8 0%, #B8E4F5 100%); color: #028090; }
+    .stat-icon.amber { background: linear-gradient(135deg, #FFF4EC 0%, #FFE4D1 100%); color: #D97706; }
+    .stat-icon.coral { background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%); color: #DC2626; }
+    .stat-icon.green { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); color: #059669; }
 
     .stat-card .value {
       font-size: 2rem;
@@ -618,14 +619,14 @@
       background: var(--bg-card);
       border-radius: var(--radius);
       padding: 24px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border-light);
+      box-shadow: 0 1px 3px rgba(0,59,92,0.06), 0 2px 8px rgba(0,59,92,0.04);
+      border: none;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
       position: relative;
     }
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 20px rgba(0,59,92,0.1), 0 8px 32px rgba(0,59,92,0.06);
     }
     .card.full-width { grid-column: 1 / -1; }
 
@@ -637,14 +638,14 @@
     }
     .card-title-group { flex: 1; }
     .card h2 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--unfpa-navy);
       margin-bottom: 4px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding-left: 12px;
+      gap: 10px;
+      padding-left: 14px;
       border-left: 3px solid var(--unfpa-orange);
     }
     .card .subtitle {
@@ -659,10 +660,10 @@
     .card-action-btn {
       width: 32px;
       height: 32px;
-      border-radius: var(--radius-xs);
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-light);
+      border-radius: 50%;
+      border: none;
+      background: var(--unfpa-light);
+      color: var(--unfpa-teal);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -670,14 +671,17 @@
       transition: all 0.2s;
     }
     .card-action-btn:hover {
-      border-color: var(--unfpa-teal);
-      color: var(--unfpa-teal);
-      background: var(--unfpa-light);
+      background: var(--unfpa-teal);
+      color: white;
     }
 
     .chart-container {
       width: 100%;
       position: relative;
+    }
+    /* Plotly chart hover styling */
+    .js-plotly-plot .plotly .modebar {
+      display: none !important;
     }
 
     /* ============ MAP CARD ============ */
@@ -830,10 +834,6 @@
     .footer-brand img {
       height: 40px;
       width: auto;
-      filter: grayscale(100%) brightness(0) invert(1) drop-shadow(0 0 0 white);
-      background: white;
-      padding: 4px 8px;
-      border-radius: 4px;
     }
     .footer-brand-text {
       font-size: 0.75rem;
