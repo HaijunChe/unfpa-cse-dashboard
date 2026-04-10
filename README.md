@@ -80,6 +80,19 @@ This dashboard is built entirely with **frontend web technologies** — no Pytho
 | **Interactivity** | Vanilla JavaScript (ES6+) | Data filtering, search, chart updates, export functionality |
 | **Hosting** | [GitHub Pages](https://pages.github.com/) | Free, automatic deployment from Git repository |
 
+### Data Pipeline (Python)
+
+The dashboard data is produced by a Python processing pipeline:
+
+```
+raw CSV data → Python cleaning/analysis → JavaScript output → embedded in dashboard
+```
+
+See the [`data/`](data/) folder for:
+- `collect_and_process.py` — data loading, validation, regional aggregation, correlation analysis
+- `raw_indicators.csv` — source data
+- `dashboard_data.js` — generated output
+
 ### Why no build tools?
 
 Keeping everything in a single `dashboard.html` file makes the project:
@@ -112,10 +125,15 @@ Or simply visit the [live demo](https://haijunche.github.io/unfpa-cse-dashboard/
 
 ```
 unfpa-cse-dashboard/
-├── dashboard.html    # Complete single-file dashboard (~1,500 lines)
-│                     # — data, styles, and JS all inline
-├── README.md         # Project documentation
-└── LICENSE           # MIT License + data usage note
+├── dashboard.html              # Complete single-file dashboard (~1,600 lines)
+│                               # — data, styles, JS, and visualizations inline
+├── data/
+│   ├── collect_and_process.py  # Python data pipeline (load → clean → analyze → output)
+│   ├── raw_indicators.csv      # Source indicator data
+│   ├── dashboard_data.js       # Generated JavaScript output (from Python)
+│   └── README.md               # Data pipeline documentation
+├── README.md                   # Project documentation
+└── LICENSE                     # MIT License + data usage note
 ```
 
 ---
