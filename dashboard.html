@@ -1579,7 +1579,12 @@
           y: regionData.map(d => d.abr),
           name: 'ABR (per 1,000)',
           type: 'bar',
-          marker: { color: colors.teal, cornerradius: 3 },
+          marker: {
+            color: '#028090',
+            opacity: 1,
+            line: { color: '#015c6b', width: 1 },
+            cornerradius: 3,
+          },
           hovertemplate: '%{x}<br>ABR: %{y} per 1,000<extra></extra>',
         },
         {
@@ -1587,7 +1592,12 @@
           y: regionData.map(d => d.cpr),
           name: 'CPR (%)',
           type: 'bar',
-          marker: { color: colors.accent1, cornerradius: 3 },
+          marker: {
+            color: '#F36F21',
+            opacity: 1,
+            line: { color: '#d45a12', width: 1 },
+            cornerradius: 3,
+          },
           hovertemplate: '%{x}<br>CPR: %{y}%<extra></extra>',
           yaxis: 'y2',
         },
@@ -1598,17 +1608,18 @@
         barmode: 'group',
         xaxis: { tickfont: { size: 10 } },
         yaxis: {
-          title: { text: 'ABR (per 1,000)', font: { size: 10, color: colors.teal } },
-          gridcolor: '#e0e6ec', tickfont: { size: 9, color: colors.teal }, side: 'left',
+          title: { text: 'ABR (per 1,000)', font: { size: 10, color: '#028090' } },
+          gridcolor: '#e0e6ec', tickfont: { size: 9, color: '#028090' }, side: 'left',
         },
         yaxis2: {
-          title: { text: 'CPR (%)', font: { size: 10, color: colors.accent1 } },
+          title: { text: 'CPR (%)', font: { size: 10, color: '#F36F21' } },
           overlaying: 'y', side: 'right', range: [0, 100],
-          tickfont: { size: 9, color: colors.accent1 }, showgrid: false,
+          tickfont: { size: 9, color: '#F36F21' }, showgrid: false,
         },
         height: 340,
         legend: { orientation: 'h', y: -0.15, x: 0.5, xanchor: 'center', font: { size: 9 } },
-        bargap: 0.25, bargroupgap: 0.1,
+        bargap: 0.35,
+        bargroupgap: 0.15,
       };
 
       Plotly.newPlot('regionChart', traces, layout, plotlyConfig);
