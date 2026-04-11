@@ -434,57 +434,43 @@
     .stat-card:hover {
       transform: translateY(-4px);
     }
-    .stat-card.active .stat-icon {
-      background: var(--unfpa-orange);
-      color: white;
-      box-shadow: 0 8px 24px rgba(243, 111, 33, 0.3);
-    }
-
     .stat-header { display: none; }
     .stat-country { display: none; }
     .stat-card .view-analysis { display: none; }
-    /* Transparent icon style - UNFPA orange */
+
+    /* Clean icon-only style - no backgrounds */
     .stat-icon {
-      width: 80px;
-      height: 80px;
-      border-radius: 0;
+      width: auto;
+      height: auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: transparent;
+      background: none !important;
+      box-shadow: none !important;
       color: var(--unfpa-orange);
       margin-bottom: 12px;
       transition: all 0.3s ease;
+      padding: 0;
     }
     .stat-card:hover .stat-icon {
-      transform: scale(1.15);
+      transform: scale(1.2);
+    }
+    .stat-card.active .stat-icon {
+      background: none !important;
+      box-shadow: none !important;
+      color: var(--unfpa-orange);
     }
     .stat-icon i {
       filter: none;
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
     }
-    .stat-icon.green, .stat-icon.amber, .stat-icon.coral {
-      background: transparent;
+    .stat-icon.green,
+    .stat-icon.amber, 
+    .stat-icon.coral {
+      background: none !important;
+      box-shadow: none !important;
       color: var(--unfpa-orange);
-    }
-    .stat-card.active .stat-icon {
-      color: var(--unfpa-orange);
-    }
-    .stat-icon.green { 
-      background: linear-gradient(135deg, #FFF4EC 0%, #fff 100%); 
-      color: var(--unfpa-orange);
-      box-shadow: 0 8px 20px rgba(243, 111, 33, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.5);
-    }
-    .stat-icon.amber { 
-      background: linear-gradient(135deg, #FFF0E6 0%, #fff 100%); 
-      color: #e86a17;
-      box-shadow: 0 8px 20px rgba(232, 106, 23, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.5);
-    }
-    .stat-icon.coral { 
-      background: linear-gradient(135deg, #FFEEE5 0%, #fff 100%); 
-      color: #d45a12;
-      box-shadow: 0 8px 20px rgba(212, 90, 18, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.5);
     }
 
     .stat-card .value {
