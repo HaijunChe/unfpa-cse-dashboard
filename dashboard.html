@@ -69,11 +69,6 @@
       --radius-lg: 16px;
     }
 
-    function changeBarMetric(metric) {
-      barMetric = metric;
-      renderBarChart(getFilteredData());
-    }
-
     /* ============ RESET & BASE ============ */
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -4655,6 +4650,11 @@
     let selectedCountry = null;
     let barSortMode = 'desc';
     let barMetric = 'cpr';
+
+    function changeBarMetric(metric) {
+      barMetric = metric;
+      renderBarChart(getFilteredData());
+    }
 
     // UNFPA color palette
     const colors = {
