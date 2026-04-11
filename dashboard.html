@@ -1276,131 +1276,154 @@
 }
 
 /* ============ CAMPAIGNS CAROUSEL ============ */
+    /* 3D C-Shaped Carousel */
     .campaigns-section {
-      padding: 64px 40px;
+      padding: 80px 40px;
       background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
       border-top: 1px solid var(--border);
+      overflow: hidden;
     }
     @media (max-width: 600px) {
-      .campaigns-section { padding: 40px 20px; }
+      .campaigns-section { padding: 60px 20px; }
     }
     .campaigns-header {
       max-width: 1200px;
-      margin: 0 auto 32px;
+      margin: 0 auto 48px;
+      text-align: center;
     }
     .campaigns-header h2 {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: var(--unfpa-navy);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      padding-left: 12px;
-      border-left: 3px solid var(--unfpa-teal);
     }
     .campaigns-header p {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--text-muted);
       max-width: 600px;
+      margin: 0 auto;
     }
-    .campaigns-carousel {
-      max-width: 1200px;
+
+    /* 3D Carousel Container */
+    .campaigns-carousel-3d {
+      max-width: 1000px;
       margin: 0 auto;
       position: relative;
+      height: 420px;
+      perspective: 1200px;
     }
-    .campaigns-track {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      scroll-snap-type: x mandatory;
-      padding: 8px 4px 24px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-      scrollbar-color: var(--unfpa-teal) transparent;
-    }
-    .campaigns-track::-webkit-scrollbar {
-      height: 6px;
-    }
-    .campaigns-track::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .campaigns-track::-webkit-scrollbar-thumb {
-      background: var(--unfpa-teal);
-      border-radius: 3px;
-    }
-    .campaign-card {
-      flex: 0 0 300px;
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      scroll-snap-align: start;
-    }
-    .campaign-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.04);
-      border-color: var(--unfpa-orange);
-    }
-    .campaign-card-img {
+    .carousel-3d-container {
       width: 100%;
-      height: 160px;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+    .carousel-3d-track {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* C-Shaped positioning - cards arranged in C shape */
+    .carousel-3d-card {
+      position: absolute;
+      width: 280px;
+      height: 360px;
+      left: 50%;
+      top: 50%;
+      margin-left: -140px;
+      margin-top: -180px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+    .carousel-3d-card:hover {
+      box-shadow: 0 25px 50px rgba(243, 111, 33, 0.25), 0 10px 20px rgba(0,0,0,0.1);
+      border-color: var(--unfpa-orange);
+      z-index: 100;
+    }
+    .carousel-3d-card.active {
+      border-color: var(--unfpa-orange);
+      box-shadow: 0 20px 40px rgba(243, 111, 33, 0.3);
+    }
+
+    /* Card Image */
+    .carousel-3d-card-img {
+      width: 100%;
+      height: 180px;
       background-size: cover;
       background-position: center;
       position: relative;
+      transform: translateZ(20px);
     }
-    .campaign-card-img::after {
+    .carousel-3d-card-img::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, transparent 40%, rgba(0,59,92,0.6) 100%);
+      background: linear-gradient(180deg, transparent 30%, rgba(0,59,92,0.7) 100%);
     }
-    .campaign-card-badge {
+    .carousel-3d-card-badge {
       position: absolute;
       top: 12px;
       left: 12px;
       background: var(--unfpa-orange);
       color: white;
-      padding: 4px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
       font-size: 0.7rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       z-index: 1;
+      box-shadow: 0 4px 12px rgba(243, 111, 33, 0.3);
+      transform: translateZ(30px);
     }
-    .campaign-card-body {
-      padding: 18px 20px 20px;
+
+    /* Card Body */
+    .carousel-3d-card-body {
+      padding: 20px;
+      transform: translateZ(15px);
     }
-    .campaign-card-body h3 {
+    .carousel-3d-card-body h3 {
       font-size: 1rem;
       font-weight: 600;
       color: var(--unfpa-navy);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       line-height: 1.4;
     }
-    .campaign-card-body p {
-      font-size: 0.82rem;
+    .carousel-3d-card-body p {
+      font-size: 0.8rem;
       color: var(--text-muted);
       line-height: 1.6;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
-    .campaign-card-link {
+    .carousel-3d-card-link {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       font-size: 0.85rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--unfpa-orange);
       text-decoration: none;
+      transition: gap 0.2s ease;
     }
-    .campaign-card-link:hover {
-      color: var(--unfpa-dark-teal);
+    .carousel-3d-card:hover .carousel-3d-card-link {
+      gap: 10px;
     }
+
+    /* Navigation */
     .campaigns-nav {
       display: flex;
       justify-content: center;
@@ -2968,6 +2991,37 @@
     }
 
 // ============ CAMPAIGNS CAROUSEL ============
+    // 3D Carousel state
+    let currentCarouselRotation = 0;
+    let carouselAutoRotate;
+
+    function updateCarouselRotation() {
+      const track = document.getElementById('carousel3dTrack');
+      if (track) {
+        track.style.transform = `rotateY(${currentCarouselRotation}deg)`;
+      }
+    }
+
+    function rotateCarousel(direction) {
+      currentCarouselRotation += direction * 45; // 45 degrees per click
+      updateCarouselRotation();
+
+      // Reset auto-rotation timer
+      clearInterval(carouselAutoRotate);
+      startCarouselAutoRotate();
+    }
+
+    function startCarouselAutoRotate() {
+      carouselAutoRotate = setInterval(() => {
+        currentCarouselRotation += 0.5; // Slow continuous rotation
+        updateCarouselRotation();
+      }, 50); // Update every 50ms for smooth animation
+    }
+
+    function stopCarouselAutoRotate() {
+      clearInterval(carouselAutoRotate);
+    }
+
     const campaignData = [
       {
         title: "Comprehensive Sexuality Education",
