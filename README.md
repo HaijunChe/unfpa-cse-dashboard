@@ -29,8 +29,8 @@ An interactive data visualization dashboard for monitoring adolescent sexual and
 This dashboard visualizes **75 countries** across **10 key SRH indicators**, including adolescent birth rates, contraceptive prevalence, HIV trends, and comprehensive sexuality education coverage. It is designed as a demonstration project for UNFPA's Comprehensive Sexuality Education (CSE) programme.
 
 **Key highlights:**
-- 6 interactive chart types (choropleth map, trend lines, scatter plot, regional comparison, radar chart)
-- 6 interactive features (metric switching, country search, region filter, detail panel, CSV export, sorting)
+- 7 interactive chart types (choropleth map, trend lines, scatter plot, regional comparison, radar chart, bar chart with metric selector)
+- 8 interactive features (metric switching, country search, region filter, detail panel with radar chart, CSV export, sorting, bar chart metric dropdown, scatter plot variable sizing)
 - UNFPA-branded UI with official logo, navigation bar, and color scheme
 - Full Python data pipeline for ETL and analysis
 - Zero build tools — deploys instantly to GitHub Pages
@@ -40,23 +40,27 @@ This dashboard visualizes **75 countries** across **10 key SRH indicators**, inc
 ## Features
 
 ### Data Visualization
-- **World Map** — Choropleth map with color-coded adolescent birth rates by country; click any country for detailed indicators
-- **Country Ranking** — Interactive bar chart comparing contraceptive prevalence across countries
+- **World Map** — Choropleth map with color-coded indicators by country; click any country to open detail panel with radar chart
+- **Country Ranking** — Interactive bar chart with dropdown metric selector (6 indicators: Birth Rate, Contraceptive Use, Unmet Need, HIV Prevalence, Sex Ed Coverage, Child Marriage)
 - **Trend Analysis** — Multi-line chart showing key indicator trends from 2010-2022 with COVID-19 annotation
-- **Relationship Analysis** — Scatter plot exploring the correlation between contraceptive use and adolescent birth rates
+- **Relationship Analysis** — Scatter plot with variable dot sizes (based on Maternal Mortality Ratio) exploring correlation between contraceptive use and adolescent birth rates
 - **Regional Comparison** — Grouped bar chart comparing average indicators across five global regions
+- **Radar Chart** — Interactive polar chart in country detail panel showing 6 key performance indicators normalized to 0-100 scale
 
 ### Interactive Features
 - **Metric Switching** — Toggle between 4 indicators on the map (Birth Rate, Contraceptive Use, Unmet Need, HIV Prevalence)
 - **Country Search** — Real-time search with auto-selection for single results
 - **Region Filter** — Filter all charts by Sub-Saharan Africa, Asia, Americas, Europe, or MENA
-- **Country Detail Panel** — Slide-out panel with radar chart and 6 key indicators per country
+- **Country Detail Panel** — Slide-out panel with interactive radar chart and 6 key indicators per country
+- **Bar Chart Metric Dropdown** — Switch between 6 indicators in Country Ranking chart via dropdown selector
+- **Scatter Plot Variable Sizing** — Dot sizes proportional to Maternal Mortality Ratio for enhanced data encoding
 - **Data Export** — Export any chart as PNG or download the full dataset as CSV
 - **Sort Controls** — Cycle bar chart sorting (descending / ascending / alphabetical)
+- **View Dashboard Button** — Hero section CTA button for quick navigation to Live Data Insights section
 
 ### Design
 - **UNFPA-brand navigation bar** — Sticky top nav with official UNFPA logo, brand text, and site links matching unfpa.org styling
-- **Cinematic hero section** — Full-width teal-to-blue gradient with world map pattern overlay, orange pill badge, and dual CTA buttons
+- **Cinematic hero section** — Full-width teal-to-blue gradient with world map pattern overlay, orange pill badge, dual CTA buttons, and "View Dashboard" button with smooth scroll to Live Data Insights
 - **UNFPA brand accents** — Orange (`#F36F21`) left borders on section headers, teal top borders on KPI cards, orange hover states on nav links
 - **Professional KPI cards** — Strong drop shadows, teal accent borders, animated number counters with trend arrows (↑ ↓), hover lift effects
 - **Dark UNFPA-style footer** — Brand logo, data source links, and copyright notice on deep navy background
@@ -153,7 +157,7 @@ Or simply visit the [live demo](https://haijunche.github.io/unfpa-cse-dashboard/
 
 ```
 unfpa-cse-dashboard/
-├── dashboard.html              # Complete single-file dashboard (~1,600 lines)
+├── dashboard.html              # Complete single-file dashboard (~5,700 lines)
 │                               # — data, styles, JS, and visualizations inline
 ├── data/
 │   ├── collect_and_process.py  # Python data pipeline (load → clean → analyze → output)
