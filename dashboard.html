@@ -4905,20 +4905,26 @@
     const carouselStep = 72; // 360 / 5 cards
 
     function render3DCarousel() {
-      const track = document.getElementById('carousel3dTrack');
-      if (!track) return;
+      const list = document.getElementById('campaignsList');
+      if (!list) return;
 
-      track.innerHTML = campaignData.map((campaign, i) => `
-        <div class="carousel-3d-card" onclick="openCampaignModal(${i})" style="transform: rotateY(${i * 72}deg) translateZ(400px);">
-          <div class="carousel-3d-card-img" style="background-image: url('${campaign.img}');">
-            <span class="carousel-3d-card-badge">Programme</span>
+      const icons = ['book-open', 'heart', 'users', 'shield', 'globe'];
+
+      list.innerHTML = campaignData.map((campaign, i) => `
+        <a href="${campaign.url}" target="_blank" class="campaign-circle-item" data-campaign="${i}" onmouseenter="highlightMapDot(${i})" onmouseleave="unhighlightMapDot()">
+          <div class="campaign-circle">
+            <i data-lucide="${icons[i]}" class="campaign-circle-icon"></i>
           </div>
-          <div class="carousel-3d-card-body">
+          <div class="campaign-circle-content">
             <h3>${campaign.title}</h3>
-            <p>${campaign.desc.substring(0, 100)}...</p>
+            <p>${campaign.desc.substring(0, 50)}...</p>
           </div>
-        </div>
+        </a>
       `).join('');
+
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
     }
 
     
