@@ -403,7 +403,27 @@
       transform: translateY(-2px);
     }
 
-    /* ============ STATS BAR ============ */
+    /* View Dashboard Button */
+    .hero-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #F36F21 0%, #E05A0C 100%);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(243, 111, 33, 0.4), 0 0 0 1px rgba(255,255,255,0.1) inset;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+    }
+    .hero-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(243, 111, 33, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;
+    }
     .stats-bar {
       display: grid;
       grid-template-columns: 1.3fr 1fr 1fr 1fr;
@@ -1764,6 +1784,10 @@
           Visit UNFPA.org
           <i data-lucide="external-link" style="width:14px;height:14px;"></i>
         </a>
+        <a href="#analysis" class="hero-cta-btn" onclick="document.getElementById('analysis').scrollIntoView({behavior: 'smooth'}); return false;">
+          <i data-lucide="bar-chart-2" style="width:18px;height:18px;"></i>
+          View Dashboard
+        </a>
       </div>
     </div>
   </section>
@@ -1858,6 +1882,14 @@
           <p class="subtitle">Top countries by selected indicator</p>
         </div>
         <div class="card-actions">
+          <select class="chart-filter" onchange="changeBarMetric(this.value)" style="padding: 4px 8px; font-size: 12px; border-radius: 6px; border: 1px solid #e0e6ec; background: white; cursor: pointer; margin-right: 8px;">
+            <option value="cpr" selected>Contraceptive Use</option>
+            <option value="abr">Birth Rate</option>
+            <option value="unmet">Unmet Need</option>
+            <option value="hiv">HIV Prevalence</option>
+            <option value="sexEd">Sex Ed Coverage</option>
+            <option value="childMarriage">Child Marriage</option>
+          </select>
           <button class="card-action-btn" title="Sort" onclick="cycleBarSort()">
             <i data-lucide="arrow-up-down" style="width:14px;height:14px;"></i>
           </button>
@@ -4903,12 +4935,13 @@
           type: 'scatter',
           name: region,
           marker: {
-            size: 10, color: regionColors[region],
+            size: regionData.map(c => Math.sqrt(c.mmr) * 0.6), color: regionColors[region],
             line: { color: 'white', width: 1 },
             opacity: 0.85,
           },
           text: regionData.map(c => c.name),
-          hovertemplate: '<b>%{text}</b><br>CPR: %{x}%<br>ABR: %{y} per 1,000<extra></extra>',
+          customdata: regionData.map(c => c.mmr),
+          hovertemplate: '<b>%{text}</b><br>CPR: %{x}%<br>ABR: %{y} per 1,000<br>MMR: %{customdata}<extra></extra>',
         };
       });
 
