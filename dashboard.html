@@ -4782,6 +4782,7 @@
 
       Plotly.newPlot('mapChart', [trace], layout, plotlyConfig).then(gd => {
         gd.on('plotly_click', d => {
+          console.log('Map clicked', d);
           const pt = d.points[0];
           if (pt && pt.location) {
             const country = data.find(c => c.iso === pt.location);
@@ -5035,6 +5036,7 @@
 
     // ============ COUNTRY PANEL ============
     function selectCountry(country) {
+      console.log('selectCountry called', country);
       selectedCountry = country;
       updateStats(getFilteredData());
       renderMap(getFilteredData());
@@ -5042,6 +5044,7 @@
     }
 
     function openCountryPanel(country) {
+      console.log('openCountryPanel called', country);
       document.getElementById('panelCountryName').textContent = country.name;
       document.getElementById('panelCountryRegion').textContent = country.region;
 
