@@ -1212,7 +1212,7 @@
 /* ============ CAMPAIGNS CAROUSEL ============ */
     /* Global Campaigns Map Section */
     .campaigns-map-section {
-      padding: 80px 40px;
+      padding: 80px 20px;
       background: linear-gradient(180deg, #f0f4f8 0%, #e8eef5 100%);
       border-top: 1px solid var(--border);
     }
@@ -1254,18 +1254,20 @@
       }
     }
 
-    /* World Map SVG */
+    /* World Map SVG - Full width without box */
     .world-map-wrapper {
       position: relative;
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: 30px;
-      box-shadow: var(--shadow);
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+      overflow: visible;
     }
     .world-map-svg {
-      width: 100%;
+      width: 120%;
       height: auto;
       display: block;
+      margin-left: -10%;
     }
     .map-continents rect {
       transition: opacity 0.3s ease;
@@ -4241,24 +4243,24 @@
           <!-- Campaign location dots with LARGER labels -->
           <g class="campaign-dots">
             <!-- 1. Comprehensive Sexuality Education - Global -->
-            <circle cx="500" cy="200" r="10" fill="#F36F21" class="campaign-dot" data-campaign="0"/>
-            <text x="500" y="180" text-anchor="middle" fill="#F36F21" font-size="14" font-weight="700">Global</text>
+            <circle cx="500" cy="200" r="12" fill="#F36F21" class="campaign-dot" data-campaign="0"/>
+            <text x="500" y="180" text-anchor="middle" fill="#F36F21" font-size="16" font-weight="700">Global</text>
 
             <!-- 2. Ending Child Marriage - Africa -->
-            <circle cx="520" cy="250" r="10" fill="#F36F21" class="campaign-dot" data-campaign="1"/>
-            <text x="520" y="275" text-anchor="middle" fill="#F36F21" font-size="14" font-weight="700">Africa</text>
+            <circle cx="520" cy="250" r="12" fill="#F36F21" class="campaign-dot" data-campaign="1"/>
+            <text x="520" y="275" text-anchor="middle" fill="#F36F21" font-size="16" font-weight="700">Africa</text>
 
             <!-- 3. Youth Leadership - Asia -->
-            <circle cx="750" cy="180" r="10" fill="#F36F21" class="campaign-dot" data-campaign="2"/>
-            <text x="750" y="160" text-anchor="middle" fill="#F36F21" font-size="14" font-weight="700">Asia</text>
+            <circle cx="750" cy="180" r="12" fill="#F36F21" class="campaign-dot" data-campaign="2"/>
+            <text x="750" y="160" text-anchor="middle" fill="#F36F21" font-size="16" font-weight="700">Asia</text>
 
             <!-- 4. Contraceptive Access - South Asia -->
-            <circle cx="700" cy="220" r="10" fill="#F36F21" class="campaign-dot" data-campaign="3"/>
-            <text x="700" y="245" text-anchor="middle" fill="#F36F21" font-size="14" font-weight="700">S. Asia</text>
+            <circle cx="700" cy="220" r="12" fill="#F36F21" class="campaign-dot" data-campaign="3"/>
+            <text x="700" y="245" text-anchor="middle" fill="#F36F21" font-size="16" font-weight="700">S. Asia</text>
 
             <!-- 5. Humanitarian Response - Europe -->
-            <circle cx="450" cy="150" r="10" fill="#F36F21" class="campaign-dot" data-campaign="4"/>
-            <text x="450" y="130" text-anchor="middle" fill="#F36F21" font-size="14" font-weight="700">Europe</text>
+            <circle cx="450" cy="150" r="12" fill="#F36F21" class="campaign-dot" data-campaign="4"/>
+            <text x="450" y="130" text-anchor="middle" fill="#F36F21" font-size="16" font-weight="700">Europe</text>
           </g>
         </svg>
       </div>
