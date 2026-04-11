@@ -1955,8 +1955,40 @@
       <div class="summary-grid" id="summaryGrid">
         <!-- Summary cards injected by JS -->
       </div>
-      <div style="margin-top:40px;text-align:center;">
-        <div id="fullDashboardChart" style="width:100%;height:500px;max-width:1200px;margin:0 auto;"></div>
+      <!-- Extended Charts Grid -->
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:40px;max-width:1400px;margin-left:auto;margin-right:auto;">
+        <!-- Donut Chart: Regional Distribution -->
+        <div style="background:var(--bg-card);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow);">
+          <h3 style="font-size:1.1rem;color:var(--unfpa-navy);margin-bottom:16px;text-align:center;">
+            <i data-lucide="pie-chart" style="width:18px;height:18px;color:var(--unfpa-orange);vertical-align:middle;margin-right:8px;"></i>
+            Regional Distribution
+          </h3>
+          <div id="donutChart" style="width:100%;height:300px;"></div>
+        </div>
+        <!-- Radar Chart: Multi-dimensional Indicators -->
+        <div style="background:var(--bg-card);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow);">
+          <h3 style="font-size:1.1rem;color:var(--unfpa-navy);margin-bottom:16px;text-align:center;">
+            <i data-lucide="target" style="width:18px;height:18px;color:var(--unfpa-orange);vertical-align:middle;margin-right:8px;"></i>
+            Regional Averages Radar
+          </h3>
+          <div id="radarChart" style="width:100%;height:300px;"></div>
+        </div>
+        <!-- Line Chart: Trends Over Time -->
+        <div style="background:var(--bg-card);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow);">
+          <h3 style="font-size:1.1rem;color:var(--unfpa-navy);margin-bottom:16px;text-align:center;">
+            <i data-lucide="trending-up" style="width:18px;height:18px;color:var(--unfpa-orange);vertical-align:middle;margin-right:8px;"></i>
+            Indicator Correlation
+          </h3>
+          <div id="correlationChart" style="width:100%;height:300px;"></div>
+        </div>
+        <!-- Network Chart: Country Relationships -->
+        <div style="background:var(--bg-card);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow);">
+          <h3 style="font-size:1.1rem;color:var(--unfpa-navy);margin-bottom:16px;text-align:center;">
+            <i data-lucide="share-2" style="width:18px;height:18px;color:var(--unfpa-orange);vertical-align:middle;margin-right:8px;"></i>
+            Regional Network
+          </h3>
+          <div id="networkChart" style="width:100%;height:300px;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -2603,7 +2635,7 @@
       document.getElementById('fullDashboardOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
       renderSummaryGrid();
-      renderFullDashboardChart();
+      setTimeout(renderExtendedCharts, 100);
     }
 
     function closeFullDashboard() {
@@ -2645,44 +2677,163 @@
       lucide.createIcons();
     }
 
-    function renderFullDashboardChart() {
-      const chartEl = document.getElementById('fullDashboardChart');
-      if (!chartEl) return;
+    function renderExtendedCharts() {
+      renderDonutChart();
+      renderRadarChart();
+      renderCorrelationChart();
+      renderNetworkChart();
+    }
+
+    // Donut Chart: Regional Distribution
+    function renderDonutChart() {
+      const regions = ['Africa', 'Asia', 'Americas', 'Europe', 'MENA'];
+      const regionCounts = regions.map(r => uniqueData.filter(c => c.region === r).length);
+      const colors = ['#F36F21', '#028090', '#10b981', '#f59e0b', '#8b5cf6'];
+
+      const data = [{
+        values: regionCounts,
+        labels: regions,
+        type: 'pie',
+        hole: 0.5,
+        marker: { colors: colors, line: { color: '#fff', width: 2 } },
+        textinfo: 'label+percent',
+        textposition: 'outside',
+        hovertemplate: '%{label}: %{value} countries<extra></extra>',
+        textfont: { size: 11 }
+      }];
+
+      const layout = {
+        showlegend: false,
+        margin: { t: 20, b: 20, l: 20, r: 20 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        annotations: [{
+          text: 'Regions',
+          showarrow: false,
+          font: { size: 14, color: '#2D2926', family: 'Arial Black' }
+        }]
+      };
+
+      Plotly.newPlot('donutChart', data, layout, { responsive: true, displayModeBar: false });
+    }
+
+    // Radar Chart: Regional Averages
+    function renderRadarChart() {
+      const regions = ['Africa', 'Asia', 'Americas', 'Europe', 'MENA'];
+      const colors = ['#F36F21', '#028090', '#10b981', '#f59e0b', '#8b5cf6'];
+
+      const traces = regions.map((region, i) => {
+        const countries = uniqueData.filter(c => c.region === region);
+        const avgAbr = countries.reduce((s, c) => s + c.abr, 0) / countries.length;
+        const avgCpr = countries.reduce((s, c) => s + c.cpr, 0) / countries.length;
+        const avgHiv = countries.reduce((s, c) => s + c.hiv, 0) / countries.length * 10;
+        const avgSexEd = countries.reduce((s, c) => s + c.sexEd, 0) / countries.length;
+        const avgChildMarriage = countries.reduce((s, c) => s + c.childMarriage, 0) / countries.length;
+
+        return {
+          type: 'scatterpolar',
+          r: [avgAbr/2, avgCpr, avgHiv, avgSexEd, avgChildMarriage],
+          theta: ['Birth Rate', 'Contraceptive Use', 'HIV Rate', 'Sex Ed', 'Child Marriage'],
+          fill: 'toself',
+          fillcolor: colors[i] + '30',
+          line: { color: colors[i], width: 2 },
+          name: region,
+          marker: { size: 6 }
+        };
+      });
+
+      const layout = {
+        polar: {
+          radialaxis: { visible: true, range: [0, 100], tickfont: { size: 8 } },
+          angularaxis: { tickfont: { size: 10 } }
+        },
+        showlegend: true,
+        legend: { orientation: 'h', y: -0.1, font: { size: 9 } },
+        margin: { t: 30, b: 60, l: 40, r: 40 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'
+      };
+
+      Plotly.newPlot('radarChart', traces, layout, { responsive: true, displayModeBar: false });
+    }
+
+    // Correlation Line Chart
+    function renderCorrelationChart() {
+      // Sort by sexEd to show correlation
+      const sorted = [...uniqueData].sort((a, b) => a.sexEd - b.sexEd);
 
       const traces = [
         {
-          x: uniqueData.map(c => c.name),
-          y: uniqueData.map(c => c.abr),
+          x: sorted.map(c => c.sexEd),
+          y: sorted.map(c => c.abr),
+          mode: 'lines+markers',
           name: 'Birth Rate',
-          type: 'scatter',
-          mode: 'lines',
-          line: { color: '#F36F21', width: 2 },
+          line: { color: '#F36F21', width: 2, shape: 'spline' },
+          marker: { size: 6, color: '#F36F21' },
           yaxis: 'y1'
         },
         {
-          x: uniqueData.map(c => c.name),
-          y: uniqueData.map(c => c.cpr),
+          x: sorted.map(c => c.sexEd),
+          y: sorted.map(c => c.cpr),
+          mode: 'lines+markers',
           name: 'Contraceptive Use',
-          type: 'scatter',
-          mode: 'lines',
-          line: { color: '#10b981', width: 2 },
+          line: { color: '#028090', width: 2, shape: 'spline' },
+          marker: { size: 6, color: '#028090' },
           yaxis: 'y2'
         }
       ];
 
       const layout = {
-        title: { text: 'Global Indicators Comparison', font: { size: 18, color: '#2D2926' } },
-        xaxis: { tickfont: { size: 8 }, tickangle: -45 },
-        yaxis: { title: 'Birth Rate (per 1,000)', side: 'left', tickfont: { color: '#F36F21' } },
-        yaxis2: { title: 'Contraceptive Use (%)', side: 'right', overlaying: 'y', tickfont: { color: '#10b981' } },
-        height: 500,
+        xaxis: { title: 'Sex Education Coverage (%)', tickfont: { size: 9 } },
+        yaxis: { title: 'ABR', side: 'left', tickfont: { size: 9, color: '#F36F21' }, titlefont: { color: '#F36F21' } },
+        yaxis2: { title: 'CPR %', side: 'right', overlaying: 'y', tickfont: { size: 9, color: '#028090' }, titlefont: { color: '#028090' } },
         showlegend: true,
-        legend: { orientation: 'h', y: 1.1 },
+        legend: { orientation: 'h', y: 1.15, font: { size: 9 } },
+        margin: { t: 40, b: 40, l: 50, r: 50 },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)'
       };
 
-      Plotly.newPlot('fullDashboardChart', traces, layout, { responsive: true });
+      Plotly.newPlot('correlationChart', traces, layout, { responsive: true, displayModeBar: false });
+    }
+
+    // Network-style Scatter Chart
+    function renderNetworkChart() {
+      const regions = ['Africa', 'Asia', 'Americas', 'Europe', 'MENA'];
+      const colors = { 'Africa': '#F36F21', 'Asia': '#028090', 'Americas': '#10b981', 'Europe': '#f59e0b', 'MENA': '#8b5cf6' };
+
+      const traces = regions.map(region => {
+        const countries = uniqueData.filter(c => c.region === region);
+        return {
+          x: countries.map(c => c.cpr),
+          y: countries.map(c => c.abr),
+          mode: 'markers+text',
+          type: 'scatter',
+          name: region,
+          text: countries.map(c => c.name),
+          textposition: 'top center',
+          textfont: { size: 8, color: colors[region] },
+          marker: {
+            size: countries.map(c => Math.sqrt(c.mmr) * 1.5),
+            color: colors[region],
+            opacity: 0.7,
+            line: { color: '#fff', width: 1 }
+          },
+          hovertemplate: '%{text}<br>CPR: %{x}% <br>ABR: %{y}<extra></extra>'
+        };
+      });
+
+      const layout = {
+        xaxis: { title: 'Contraceptive Prevalence (%)', tickfont: { size: 9 } },
+        yaxis: { title: 'Adolescent Birth Rate', tickfont: { size: 9 } },
+        showlegend: true,
+        legend: { orientation: 'h', y: 1.12, font: { size: 9 } },
+        margin: { t: 50, b: 50, l: 60, r: 30 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'
+      };
+
+      Plotly.newPlot('networkChart', traces, layout, { responsive: true, displayModeBar: false });
     }
 
     // ============ FULL DASHBOARD ============
@@ -2690,7 +2841,7 @@
       document.getElementById('fullDashboardOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
       renderSummaryGrid();
-      setTimeout(renderFullDashboardChart, 100);
+      setTimeout(renderExtendedCharts, 100);
     }
 
     function closeFullDashboard() {
