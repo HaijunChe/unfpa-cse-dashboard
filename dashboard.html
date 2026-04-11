@@ -443,27 +443,33 @@
     .stat-header { display: none; }
     .stat-country { display: none; }
     .stat-card .view-analysis { display: none; }
-    /* Large icon style */
+    /* Transparent icon style - UNFPA orange */
     .stat-icon {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--unfpa-orange-light);
+      background: transparent;
       color: var(--unfpa-orange);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       transition: all 0.3s ease;
     }
     .stat-card:hover .stat-icon {
-      background: var(--unfpa-orange);
-      color: white;
-      transform: scale(1.1);
-      box-shadow: 0 8px 24px rgba(243, 111, 33, 0.25);
+      transform: scale(1.15);
     }
     .stat-icon i {
       filter: none;
+      width: 48px;
+      height: 48px;
+    }
+    .stat-icon.green, .stat-icon.amber, .stat-icon.coral {
+      background: transparent;
+      color: var(--unfpa-orange);
+    }
+    .stat-card.active .stat-icon {
+      color: var(--unfpa-orange);
     }
     .stat-icon.green { 
       background: linear-gradient(135deg, #FFF4EC 0%, #fff 100%); 
