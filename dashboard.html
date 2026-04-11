@@ -4728,10 +4728,10 @@
         animateNumber(document.getElementById('stat-contraceptive'), selectedCountry.cpr, '%');
         animateNumber(document.getElementById('stat-unmet'), selectedCountry.unmet, '%');
         animateNumber(document.getElementById('stat-hiv'), selectedCountry.hiv, '%');
-        document.getElementById('statCountryAbr').textContent = selectedCountry.name;
-        document.getElementById('statCountryCpr').textContent = selectedCountry.name;
-        document.getElementById('statCountryUnmet').textContent = selectedCountry.name;
-        document.getElementById('statCountryHiv').textContent = selectedCountry.name;
+        
+        
+        
+        
         document.querySelectorAll('.stat-card').forEach(c => c.classList.add('active'));
       } else {
         animateNumber(document.getElementById('stat-birth-rate'), avg('abr'));
@@ -4782,7 +4782,6 @@
 
       Plotly.newPlot('mapChart', [trace], layout, plotlyConfig).then(gd => {
         gd.on('plotly_click', d => {
-          console.log('Map clicked', d);
           const pt = d.points[0];
           if (pt && pt.location) {
             const country = data.find(c => c.iso === pt.location);
@@ -5036,7 +5035,6 @@
 
     // ============ COUNTRY PANEL ============
     function selectCountry(country) {
-      console.log('selectCountry called', country);
       selectedCountry = country;
       updateStats(getFilteredData());
       renderMap(getFilteredData());
@@ -5044,7 +5042,6 @@
     }
 
     function openCountryPanel(country) {
-      console.log('openCountryPanel called', country);
       document.getElementById('panelCountryName').textContent = country.name;
       document.getElementById('panelCountryRegion').textContent = country.region;
 
