@@ -1210,151 +1210,188 @@
 }
 
 /* ============ CAMPAIGNS CAROUSEL ============ */
-    /* 3D C-Shaped Carousel */
-    .campaigns-section {
+    /* Global Campaigns Map Section */
+    .campaigns-map-section {
       padding: 80px 40px;
-      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      background: linear-gradient(180deg, #f0f4f8 0%, #e8eef5 100%);
       border-top: 1px solid var(--border);
-      overflow: hidden;
     }
-    @media (max-width: 600px) {
-      .campaigns-section { padding: 60px 20px; }
+    @media (max-width: 768px) {
+      .campaigns-map-section { padding: 60px 20px; }
     }
-    .campaigns-header {
+
+    .campaigns-map-header {
       max-width: 1200px;
       margin: 0 auto 48px;
       text-align: center;
     }
-    .campaigns-header h2 {
-      font-size: 1.5rem;
+    .campaigns-map-header h2 {
+      font-size: 2rem;
       font-weight: 700;
       color: var(--unfpa-navy);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      margin-bottom: 12px;
     }
-    .campaigns-header p {
-      font-size: 0.95rem;
+    .campaigns-map-header p {
+      font-size: 1rem;
       color: var(--text-muted);
       max-width: 600px;
       margin: 0 auto;
     }
 
-    /* 3D Carousel Container */
-    .campaigns-carousel-3d {
-      max-width: 1000px;
+    /* Map Container */
+    .campaigns-map-container {
+      max-width: 1200px;
       margin: 0 auto;
-      position: relative;
-      height: 420px;
-      perspective: 1200px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      align-items: center;
     }
-    .carousel-3d-container {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-    }
-    .carousel-3d-track {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      transform-style: preserve-3d;
-      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    @media (max-width: 968px) {
+      .campaigns-map-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
     }
 
-    /* C-Shaped positioning - cards arranged in C shape */
-    .carousel-3d-card {
-      position: absolute;
-      width: 280px;
-      height: 360px;
-      left: 50%;
-      top: 50%;
-      margin-left: -140px;
-      margin-top: -180px;
-      background: var(--bg-card);
+    /* World Map SVG */
+    .world-map-wrapper {
+      position: relative;
+      background: white;
       border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      transform-style: preserve-3d;
-      backface-visibility: hidden;
+      padding: 30px;
+      box-shadow: var(--shadow);
     }
-    .carousel-3d-card:hover {
-      box-shadow: 0 25px 50px rgba(243, 111, 33, 0.25), 0 10px 20px rgba(0,0,0,0.1);
-      border-color: var(--unfpa-orange);
-      z-index: 100;
+    .world-map-svg {
+      width: 100%;
+      height: auto;
+      display: block;
     }
-    .carousel-3d-card.active {
-      border-color: var(--unfpa-orange);
-      box-shadow: 0 20px 40px rgba(243, 111, 33, 0.3);
+    .map-continents rect {
+      transition: opacity 0.3s ease;
+    }
+    .world-map-wrapper:hover .map-continents rect {
+      opacity: 0.8;
     }
 
-    /* Card Image */
-    .carousel-3d-card-img {
-      width: 100%;
-      height: 180px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      transform: translateZ(20px);
+    /* Campaign dots */
+    .campaign-dot {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: pulseDot 2s ease-in-out infinite;
     }
-    .carousel-3d-card-img::after {
+    .campaign-dot:hover {
+      r: 12;
+      filter: drop-shadow(0 0 8px rgba(243, 111, 33, 0.6));
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Connection lines */
+    .map-line {
+      stroke-dasharray: 5,5;
+      animation: dashLine 20s linear infinite;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .world-map-wrapper:hover .map-line,
+    .map-line.active {
+      opacity: 1;
+    }
+    @keyframes dashLine {
+      to { stroke-dashoffset: -100; }
+    }
+
+    /* Campaigns List */
+    .campaigns-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .campaign-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-light);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .campaign-list-item::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent 30%, rgba(0,59,92,0.7) 100%);
-    }
-    .carousel-3d-card-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
       background: var(--unfpa-orange);
-      color: white;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      z-index: 1;
-      box-shadow: 0 4px 12px rgba(243, 111, 33, 0.3);
-      transform: translateZ(30px);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+    .campaign-list-item:hover {
+      transform: translateX(8px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--unfpa-orange-light);
+    }
+    .campaign-list-item:hover::before {
+      transform: scaleY(1);
+    }
+    .campaign-list-item.active {
+      border-color: var(--unfpa-orange);
+      background: #fff9f5;
+    }
+    .campaign-list-item.active::before {
+      transform: scaleY(1);
     }
 
-    /* Card Body */
-    .carousel-3d-card-body {
-      padding: 20px;
-      transform: translateZ(15px);
+    .campaign-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--unfpa-orange-light);
+      color: var(--unfpa-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
     }
-    .carousel-3d-card-body h3 {
+    .campaign-list-item:hover .campaign-number {
+      background: var(--unfpa-orange);
+      color: white;
+    }
+
+    .campaign-content {
+      flex: 1;
+    }
+    .campaign-content h3 {
       font-size: 1rem;
       font-weight: 600;
       color: var(--unfpa-navy);
-      margin-bottom: 10px;
-      line-height: 1.4;
+      margin-bottom: 6px;
     }
-    .carousel-3d-card-body p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-    .carousel-3d-card-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .campaign-content p {
       font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .campaign-link {
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--unfpa-orange);
-      text-decoration: none;
-      transition: gap 0.2s ease;
-    }
-    .carousel-3d-card:hover .carousel-3d-card-link {
-      gap: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
     /* Navigation */
@@ -1741,21 +1778,66 @@
 
   </section>
 
-  <!-- Campaigns 3D C-Shaped Carousel -->
-  <section class="campaigns-section fade-up">
-    <div class="campaigns-header">
-      <h2><i data-lucide="megaphone" style="width:24px;height:24px;color:var(--unfpa-orange);"></i> All Campaigns</h2>
-      <p>Explore UNFPA's global initiatives on adolescent health, education, and empowerment across regions.</p>
+  <!-- Global Campaigns Map Section -->
+  <section class="campaigns-map-section fade-up">
+    <div class="campaigns-map-header">
+      <h2>Global Impact Map</h2>
+      <p>Explore UNFPA's worldwide initiatives connecting communities across continents.</p>
     </div>
-    <div class="campaigns-carousel-3d" id="campaignsCarousel3d">
-      <div class="carousel-3d-container">
-        <div class="carousel-3d-track" id="carousel3dTrack">
-          <!-- Cards will be generated by JavaScript -->
-        </div>
+    
+    <div class="campaigns-map-container">
+      <!-- SVG World Map with Dots -->
+      <div class="world-map-wrapper">
+        <svg viewBox="0 0 1000 500" class="world-map-svg">
+          <defs>
+            <pattern id="dotPattern" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.5" fill="#F36F21" opacity="0.3"/>
+            </pattern>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#F36F21;stop-opacity:0.8" />
+              <stop offset="100%" style="stop-color:#F36F21;stop-opacity:0.2" />
+            </linearGradient>
+          </defs>
+          
+          <!-- Simplified world map dots -->
+          <g class="map-continents">
+            <!-- North America -->
+            <rect x="50" y="80" width="180" height="120" fill="url(#dotPattern)" rx="10"/>
+            <!-- South America -->
+            <rect x="200" y="280" width="100" height="140" fill="url(#dotPattern)" rx="10"/>
+            <!-- Europe -->
+            <rect x="420" y="70" width="120" height="80" fill="url(#dotPattern)" rx="8"/>
+            <!-- Africa -->
+            <rect x="430" y="160" width="130" height="150" fill="url(#dotPattern)" rx="10"/>
+            <!-- Asia -->
+            <rect x="560" y="60" width="280" height="160" fill="url(#dotPattern)" rx="12"/>
+            <!-- Australia -->
+            <rect x="780" y="320" width="100" height="70" fill="url(#dotPattern)" rx="8"/>
+          </g>
+          
+          <!-- Connection lines to campaigns -->
+          <g class="connection-lines">
+            <line x1="140" y1="140" x2="300" y2="140" stroke="url(#lineGradient)" stroke-width="2" stroke-dasharray="5,5" class="map-line" data-campaign="0"/>
+            <line x1="495" y1="235" x2="300" y2="200" stroke="url(#lineGradient)" stroke-width="2" stroke-dasharray="5,5" class="map-line" data-campaign="1"/>
+            <line x1="700" y1="140" x2="700" y2="280" stroke="url(#lineGradient)" stroke-width="2" stroke-dasharray="5,5" class="map-line" data-campaign="2"/>
+            <line x1="830" y1="355" x2="850" y2="200" stroke="url(#lineGradient)" stroke-width="2" stroke-dasharray="5,5" class="map-line" data-campaign="3"/>
+            <line x1="250" y1="350" x2="500" y2="380" stroke="url(#lineGradient)" stroke-width="2" stroke-dasharray="5,5" class="map-line" data-campaign="4"/>
+          </g>
+          
+          <!-- Glowing dots for campaign locations -->
+          <g class="campaign-dots">
+            <circle cx="140" cy="140" r="8" fill="#F36F21" class="campaign-dot" data-campaign="0"/>
+            <circle cx="495" cy="235" r="8" fill="#F36F21" class="campaign-dot" data-campaign="1"/>
+            <circle cx="700" cy="140" r="8" fill="#F36F21" class="campaign-dot" data-campaign="2"/>
+            <circle cx="830" cy="355" r="8" fill="#F36F21" class="campaign-dot" data-campaign="3"/>
+            <circle cx="250" cy="350" r="8" fill="#F36F21" class="campaign-dot" data-campaign="4"/>
+          </g>
+        </svg>
       </div>
-      <div class="campaigns-nav" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:200;">
-        <button class="campaigns-nav-btn" onclick="rotateCarousel(-1)" aria-label="Previous"><i data-lucide="chevron-left" style="width:18px;height:18px;"></i></button>
-        <button class="campaigns-nav-btn" onclick="rotateCarousel(1)" aria-label="Next"><i data-lucide="chevron-right" style="width:18px;height:18px;"></i></button>
+      
+      <!-- Campaign Cards List -->
+      <div class="campaigns-list" id="campaignsList">
+        <!-- Cards will be generated by JavaScript -->
       </div>
     </div>
   </section>
@@ -2507,23 +2589,7 @@
       `).join('');
     }
 
-    function rotateCarousel(direction) {
-      const track = document.getElementById('carousel3dTrack');
-      if (!track) return;
-
-      carouselRotation += direction * carouselStep;
-      track.style.animation = 'none';
-      track.style.transform = `rotateY(${carouselRotation}deg)`;
-      track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-
-      // Resume auto-rotation after delay
-      setTimeout(() => {
-        track.style.animation = 'carouselRotate 30s linear infinite';
-        track.style.transform = '';
-        track.style.transition = '';
-      }, 3000);
-    }
-
+    
     // ============ FULL DASHBOARD ============
     function openFullDashboard() {
       document.getElementById('fullDashboardOverlay').classList.add('open');
