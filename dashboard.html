@@ -249,7 +249,7 @@
       inset: -5%;
       background-size: cover;
       background-position: center;
-      animation: heroBgSlide 24s infinite ease-in-out;
+      animation: heroBgSlide 30s infinite ease-in-out;
       filter: brightness(0.85) saturate(0.95);
     }
     .hero-bg-slide:nth-child(1) {
@@ -258,17 +258,27 @@
     }
     .hero-bg-slide:nth-child(2) {
       background-image: url("https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=1920&q=80");
-      animation-delay: 6s;
+      animation-delay: 5s;
       opacity: 0;
     }
     .hero-bg-slide:nth-child(3) {
       background-image: url("https://images.unsplash.com/photo-1529390079861-591da014bde6?w=1920&q=80");
-      animation-delay: 12s;
+      animation-delay: 10s;
       opacity: 0;
     }
     .hero-bg-slide:nth-child(4) {
       background-image: url("https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=1920&q=80");
-      animation-delay: 18s;
+      animation-delay: 15s;
+      opacity: 0;
+    }
+    .hero-bg-slide:nth-child(5) {
+      background-image: url("https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&q=80");
+      animation-delay: 20s;
+      opacity: 0;
+    }
+    .hero-bg-slide:nth-child(6) {
+      background-image: url("https://images.unsplash.com/photo-1594708767771-a7502f4b11ab?w=1920&q=80");
+      animation-delay: 25s;
       opacity: 0;
     }
     @keyframes heroBgSlide {
@@ -1517,6 +1527,8 @@
   <section class="hero" id="hero">
     <!-- Scrolling background images -->
     <div class="hero-bg-container">
+      <div class="hero-bg-slide"></div>
+      <div class="hero-bg-slide"></div>
       <div class="hero-bg-slide"></div>
       <div class="hero-bg-slide"></div>
       <div class="hero-bg-slide"></div>
