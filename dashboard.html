@@ -32,37 +32,36 @@
   <style>
     /* ============ CSS VARIABLES ============ */
     :root {
-      --unfpa-teal: #009EDB;
-      --unfpa-dark-teal: #0077A3;
-      --unfpa-navy: #003B5C;
-      --unfpa-deep: #002847;
-      --unfpa-light: #E6F4F8;
-      --unfpa-mid: #4DB8E8;
-      --unfpa-accent: #00A8B5;
-
-      --text-dark: #0f172a;
-      --text-muted: #475569;
-      --text-light: #94a3b8;
-
-      --bg-body: #f1f5f9;
-      --bg-card: #ffffff;
-      --bg-elevated: #f8fafc;
-      --border: #cbd5e1;
-      --border-light: #e2e8f0;
-
       --unfpa-orange: #F36F21;
       --unfpa-orange-light: #FFF4EC;
       --unfpa-orange-hover: #E05A0C;
+      --unfpa-orange-dark: #D35400;
+      --unfpa-orange-pale: #FFE8D6;
+
+      --unfpa-navy: #2D2926;
+      --unfpa-charcoal: #4A4A4A;
+      --unfpa-warm-gray: #6B6B6B;
+
+      --text-dark: #2D2926;
+      --text-muted: #6B6B6B;
+      --text-light: #9CA3AF;
+
+      --bg-body: #FAFAFA;
+      --bg-card: #ffffff;
+      --bg-elevated: #FFF4EC;
+      --border: #E5E7EB;
+      --border-light: #F3F4F6;
+
       --amber: #f59e0b;
       --coral: #ef4444;
       --green: #10b981;
       --purple: #8b5cf6;
 
-      --shadow-sm: 0 1px 2px rgba(15,23,42,0.05);
-      --shadow: 0 4px 6px -1px rgba(15,23,42,0.08), 0 2px 4px -2px rgba(15,23,42,0.04);
-      --shadow-md: 0 10px 15px -3px rgba(15,23,42,0.1), 0 4px 6px -4px rgba(15,23,42,0.05);
-      --shadow-lg: 0 20px 25px -5px rgba(15,23,42,0.1), 0 8px 10px -6px rgba(15,23,42,0.04);
-      --shadow-hover: 0 25px 50px -12px rgba(15,23,42,0.15);
+      --shadow-sm: 0 1px 2px rgba(45,41,38,0.05);
+      --shadow: 0 4px 20px rgba(45,41,38,0.05);
+      --shadow-md: 0 10px 25px -3px rgba(45,41,38,0.08), 0 4px 10px -4px rgba(45,41,38,0.04);
+      --shadow-lg: 0 20px 40px -5px rgba(45,41,38,0.1), 0 8px 15px -6px rgba(45,41,38,0.04);
+      --shadow-hover: 0 25px 50px -12px rgba(45,41,38,0.12);
 
       --radius: 12px;
       --radius-sm: 8px;
@@ -406,95 +405,101 @@
       border-radius: var(--radius-lg);
       padding: 24px;
       box-shadow: var(--shadow);
-      border: 1px solid var(--border-light);
+      border: none;
       transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
     }
-    .stat-card:first-child {
-      background: linear-gradient(135deg, var(--unfpa-navy) 0%, var(--unfpa-dark-teal) 100%);
-      color: white;
-      border: none;
-    }
-    .stat-card:first-child .label,
-    .stat-card:first-child .stat-icon { color: rgba(255,255,255,0.85); }
-    .stat-card:first-child .value { color: white; }
-    .stat-card::after {
+    .stat-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 3px;
-      background: var(--unfpa-teal);
-      transform: scaleX(0);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .stat-card:first-child::after {
+      height: 4px;
       background: var(--unfpa-orange);
-    }
-    .stat-card:hover::after {
-      transform: scaleX(1);
     }
     .stat-card:hover {
       transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--unfpa-teal);
+      box-shadow: var(--shadow-hover);
     }
     .stat-card.active {
-      box-shadow: var(--shadow-lg), 0 0 0 2px var(--unfpa-teal);
+      box-shadow: var(--shadow-lg), 0 0 0 2px var(--unfpa-orange-light);
     }
 
     .stat-header {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 0;
     }
     .stat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-sm);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0,158,219,0.1);
-      color: var(--unfpa-teal);
+      background: var(--unfpa-orange-light);
+      color: var(--unfpa-orange);
     }
-    .stat-card:first-child .stat-icon {
-      background: rgba(255,255,255,0.15);
-    }
+    .stat-icon.green { background: #ECFDF5; color: #10b981; }
+    .stat-icon.amber { background: #FFFBEB; color: #f59e0b; }
+    .stat-icon.coral { background: #FEF2F2; color: #ef4444; }
 
     .stat-card .value {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       font-weight: 800;
       color: var(--unfpa-navy);
       line-height: 1.1;
       display: flex;
       align-items: baseline;
-      gap: 8px;
-      margin-bottom: 4px;
+      gap: 10px;
+      margin-bottom: 8px;
+      margin-top: 12px;
     }
     .stat-card .value .trend {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      padding: 2px 8px;
+      padding: 4px 10px;
       border-radius: 100px;
-      background: rgba(16,185,129,0.1);
+      background: #ECFDF5;
+      color: #059669;
     }
     .stat-card .value .trend.down {
-      background: rgba(239,68,68,0.1);
+      background: #FEF2F2;
+      color: #DC2626;
     }
     .stat-card .label {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
       font-weight: 500;
       line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .stat-card .view-analysis {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--unfpa-orange);
+      text-decoration: none;
+      margin-top: auto;
+      transition: gap 0.2s ease;
+    }
+    .stat-card .view-analysis:hover {
+      gap: 10px;
+    }
+    .stat-card .view-analysis::after {
+      content: '→';
     }
     .stat-country {
       font-size: 0.7rem;
-      color: var(--unfpa-teal);
+      color: var(--unfpa-orange);
       font-weight: 600;
       margin-top: 4px;
       opacity: 0;
@@ -544,8 +549,8 @@
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .search-box input:focus {
-      border-color: var(--unfpa-teal);
-      box-shadow: 0 0 0 4px rgba(0,158,219,0.08);
+      border-color: var(--unfpa-orange);
+      box-shadow: 0 0 0 4px rgba(243,111,33,0.08);
     }
     .search-box input::placeholder { color: var(--text-light); }
 
@@ -566,8 +571,8 @@
       min-width: 180px;
     }
     .control-select:focus {
-      border-color: var(--unfpa-teal);
-      box-shadow: 0 0 0 4px rgba(0,158,219,0.08);
+      border-color: var(--unfpa-orange);
+      box-shadow: 0 0 0 4px rgba(243,111,33,0.08);
     }
 
     .btn {
@@ -602,13 +607,13 @@
     .btn-ghost:hover {
       background: var(--unfpa-light);
       color: var(--unfpa-dark-teal);
-      border-color: var(--unfpa-teal);
+      border-color: var(--unfpa-orange);
       transform: translateY(-1px);
     }
     .btn-ghost.active {
       background: var(--unfpa-teal);
       color: white;
-      border-color: var(--unfpa-teal);
+      border-color: var(--unfpa-orange);
       box-shadow: 0 2px 8px rgba(0,158,219,0.2);
     }
 
@@ -678,7 +683,7 @@
     .card:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
-      border-color: var(--unfpa-teal);
+      border-color: var(--unfpa-orange);
     }
     .card.full-width { grid-column: 1 / -1; }
 
@@ -932,7 +937,270 @@
       color: rgba(255,255,255,0.35);
     }
 
-    /* ============ CAMPAIGNS CAROUSEL ============ */
+    /* ============ ANALYSIS PREVIEW SECTION ============ */
+.analysis-preview {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 80px 40px;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+.analysis-preview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(243,111,33,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.analysis-preview::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(243,111,33,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.analysis-preview-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.analysis-preview-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.analysis-preview-header h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.analysis-preview-header p {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Animated Stats Grid */
+.animated-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+@media (max-width: 768px) {
+  .animated-stats { grid-template-columns: repeat(2, 1fr); }
+}
+.animated-stat {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 32px 20px;
+  text-align: center;
+  transition: all 0.4s ease;
+  animation: statFloat 4s ease-in-out infinite;
+}
+.animated-stat:nth-child(1) { animation-delay: 0s; }
+.animated-stat:nth-child(2) { animation-delay: 0.5s; }
+.animated-stat:nth-child(3) { animation-delay: 1s; }
+.animated-stat:nth-child(4) { animation-delay: 1.5s; }
+@keyframes statFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animated-stat:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--unfpa-orange);
+  transform: translateY(-4px);
+}
+.animated-stat-value {
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--unfpa-orange) 0%, #FFB549 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+.animated-stat-label {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+}
+
+/* Data Flow Animation */
+.data-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 48px 0;
+  flex-wrap: wrap;
+}
+.data-flow-node {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(243,111,33,0.15);
+  border: 2px solid var(--unfpa-orange);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  position: relative;
+  animation: nodePulse 2s ease-in-out infinite;
+}
+.data-flow-node:nth-child(1) { animation-delay: 0s; }
+.data-flow-node:nth-child(3) { animation-delay: 0.5s; }
+.data-flow-node:nth-child(5) { animation-delay: 1s; }
+.data-flow-node:nth-child(7) { animation-delay: 1.5s; }
+@keyframes nodePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(243,111,33,0.4); }
+  50% { box-shadow: 0 0 25px 12px rgba(243,111,33,0.1); }
+}
+.data-flow-arrow {
+  color: var(--unfpa-orange);
+  animation: arrowFlow 1.5s ease-in-out infinite;
+}
+@keyframes arrowFlow {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(5px); }
+}
+
+/* Expand Dashboard Button */
+.expand-dashboard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--unfpa-orange);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(243,111,33,0.3);
+}
+.expand-dashboard-btn:hover {
+  background: var(--unfpa-orange-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(243,111,33,0.4);
+}
+
+/* Full Dashboard Overlay */
+.full-dashboard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,46,0.95);
+  backdrop-filter: blur(10px);
+  z-index: 3000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+  overflow-y: auto;
+}
+.full-dashboard-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+.full-dashboard-content {
+  background: var(--bg-body);
+  min-height: 100vh;
+  padding: 80px 40px;
+  position: relative;
+}
+.full-dashboard-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dark);
+  box-shadow: var(--shadow-lg);
+  transition: all 0.2s;
+  z-index: 3001;
+}
+.full-dashboard-close:hover {
+  background: var(--coral);
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Summary Grid in Full Dashboard */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.summary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+.summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--unfpa-orange);
+}
+.summary-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--unfpa-navy);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.summary-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.summary-stat-row:last-child {
+  border-bottom: none;
+}
+.summary-stat-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.summary-stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--unfpa-navy);
+}
+
+/* ============ CAMPAIGNS CAROUSEL ============ */
     .campaigns-section {
       padding: 64px 40px;
       background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
@@ -1001,7 +1269,7 @@
     .campaign-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.04);
-      border-color: var(--unfpa-teal);
+      border-color: var(--unfpa-orange);
     }
     .campaign-card-img {
       width: 100%;
@@ -1052,7 +1320,7 @@
       gap: 4px;
       font-size: 0.85rem;
       font-weight: 500;
-      color: var(--unfpa-teal);
+      color: var(--unfpa-orange);
       text-decoration: none;
     }
     .campaign-card-link:hover {
@@ -1078,8 +1346,8 @@
       transition: all 0.2s;
     }
     .campaigns-nav-btn:hover {
-      border-color: var(--unfpa-teal);
-      color: var(--unfpa-teal);
+      border-color: var(--unfpa-orange);
+      color: var(--unfpa-orange);
       background: var(--unfpa-light);
     }
     /* Campaign detail modal */
@@ -1278,6 +1546,7 @@
       <div class="value" id="stat-birth-rate">--<span class="trend down">↓ 12%</span></div>
       <div class="label">Adolescent Birth Rate<br><span style="font-size:0.7rem;color:var(--text-light)">per 1,000 women aged 15-19</span></div>
       <div class="stat-country" id="statCountryAbr"></div>
+      <a href="#dashboard" class="view-analysis" onclick="scrollToChart('abr'); return false;">View Analysis</a>
     </div>
     <div class="stat-card" id="statCardCpr" onclick="selectMetric('cpr')">
       <div class="stat-header">
@@ -1286,6 +1555,7 @@
       <div class="value" id="stat-contraceptive">--<span class="trend up">↑ 8%</span></div>
       <div class="label">Contraceptive Prevalence<br><span style="font-size:0.7rem;color:var(--text-light)">modern methods, women 15-49</span></div>
       <div class="stat-country" id="statCountryCpr"></div>
+      <a href="#dashboard" class="view-analysis" onclick="scrollToChart('cpr'); return false;">View Analysis</a>
     </div>
     <div class="stat-card" id="statCardUnmet" onclick="selectMetric('unmet')">
       <div class="stat-header">
@@ -1294,6 +1564,7 @@
       <div class="value" id="stat-unmet">--<span class="trend down">↓ 5%</span></div>
       <div class="label">Unmet Need for FP<br><span style="font-size:0.7rem;color:var(--text-light)">women with unmet need</span></div>
       <div class="stat-country" id="statCountryUnmet"></div>
+      <a href="#dashboard" class="view-analysis" onclick="scrollToChart('unmet'); return false;">View Analysis</a>
     </div>
     <div class="stat-card" id="statCardHiv" onclick="selectMetric('hiv')">
       <div class="stat-header">
@@ -1302,6 +1573,7 @@
       <div class="value" id="stat-hiv">--<span class="trend down">↓ 3%</span></div>
       <div class="label">HIV Prevalence<br><span style="font-size:0.7rem;color:var(--text-light)">women aged 15-24 (%)</span></div>
       <div class="stat-country" id="statCountryHiv"></div>
+      <a href="#dashboard" class="view-analysis" onclick="scrollToChart('hiv'); return false;">View Analysis</a>
     </div>
   </div>
 
@@ -1534,6 +1806,83 @@
     </div>
   </div>
 
+  <!-- Analysis Preview Section -->
+  <section class="analysis-preview" id="analysis">
+    <div class="analysis-preview-inner">
+      <div class="analysis-preview-header">
+        <h2><i data-lucide="bar-chart-2" style="width:28px;height:28px;vertical-align:middle;margin-right:10px;"></i>Live Data Insights</h2>
+        <p>Real-time analysis of adolescent sexual and reproductive health indicators across 75 countries</p>
+      </div>
+
+      <div class="animated-stats">
+        <div class="animated-stat">
+          <div class="animated-stat-value" id="animStat1">0</div>
+          <div class="animated-stat-label">Countries Monitored</div>
+        </div>
+        <div class="animated-stat">
+          <div class="animated-stat-value" id="animStat2">0%</div>
+          <div class="animated-stat-label">Avg Birth Rate Drop</div>
+        </div>
+        <div class="animated-stat">
+          <div class="animated-stat-value" id="animStat3">0M</div>
+          <div class="animated-stat-label">Youth Reached</div>
+        </div>
+        <div class="animated-stat">
+          <div class="animated-stat-value" id="animStat4">0%</div>
+          <div class="animated-stat-label">Data Coverage</div>
+        </div>
+      </div>
+
+      <div class="data-flow">
+        <div class="data-flow-node">
+          <i data-lucide="database" style="width:24px;height:24px;margin-bottom:4px;"></i>
+          <span>Data</span>
+        </div>
+        <i data-lucide="arrow-right" class="data-flow-arrow" style="width:20px;height:20px;"></i>
+        <div class="data-flow-node">
+          <i data-lucide="brain" style="width:24px;height:24px;margin-bottom:4px;"></i>
+          <span>AI</span>
+        </div>
+        <i data-lucide="arrow-right" class="data-flow-arrow" style="width:20px;height:20px;"></i>
+        <div class="data-flow-node">
+          <i data-lucide="activity" style="width:24px;height:24px;margin-bottom:4px;"></i>
+          <span>Analysis</span>
+        </div>
+        <i data-lucide="arrow-right" class="data-flow-arrow" style="width:20px;height:20px;"></i>
+        <div class="data-flow-node">
+          <i data-lucide="lightbulb" style="width:24px;height:24px;margin-bottom:4px;"></i>
+          <span>Insights</span>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="expand-dashboard-btn" onclick="openFullDashboard()">
+          <i data-lucide="layout-dashboard" style="width:20px;height:20px;"></i>
+          View Complete Dashboard
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full Dashboard Overlay -->
+  <div class="full-dashboard-overlay" id="fullDashboardOverlay">
+    <button class="full-dashboard-close" onclick="closeFullDashboard()" aria-label="Close">
+      <i data-lucide="x" style="width:24px;height:24px;"></i>
+    </button>
+    <div class="full-dashboard-content">
+      <div style="text-align:center;margin-bottom:40px;">
+        <h2 style="font-size:2rem;color:var(--unfpa-navy);margin-bottom:12px;">Complete Data Overview</h2>
+        <p style="color:var(--text-muted);font-size:1.1rem;">Comprehensive analysis of all indicators across regions</p>
+      </div>
+      <div class="summary-grid" id="summaryGrid">
+        <!-- Summary cards injected by JS -->
+      </div>
+      <div style="margin-top:40px;text-align:center;">
+        <div id="fullDashboardChart" style="width:100%;height:500px;max-width:1200px;margin:0 auto;"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
@@ -1669,7 +2018,7 @@
 
     // Metric definitions
     const metrics = {
-      abr:   { label: 'Adolescent Birth Rate', unit: 'per 1,000', color: '#009EDB', max: 200, colorscale: [[0,'#E6F4F8'],[0.2,'#B8E4F5'],[0.4,'#4DB8E8'],[0.6,'#009EDB'],[0.8,'#0077A3'],[1,'#003B5C']] },
+      abr:   { label: 'Adolescent Birth Rate', unit: 'per 1,000', color: '#F36F21', max: 200, colorscale: [[0,'#FFF4EC'],[0.2,'#FFD9C4'],[0.4,'#FFA873'],[0.6,'#F36F21'],[0.8,'#E05A0C'],[1,'#D35400']] },
       cpr:   { label: 'Contraceptive Prevalence', unit: '%', color: '#10b981', max: 100, colorscale: [[0,'#ecfdf5'],[0.2,'#a7f3d0'],[0.4,'#34d399'],[0.6,'#10b981'],[0.8,'#059669'],[1,'#064e3b']] },
       unmet: { label: 'Unmet Need for FP', unit: '%', color: '#f59e0b', max: 50, colorscale: [[0,'#fffbeb'],[0.2,'#fde68a'],[0.4,'#fbbf24'],[0.6,'#f59e0b'],[0.8,'#d97706'],[1,'#78350f']] },
       hiv:   { label: 'HIV Prevalence', unit: '%', color: '#ef4444', max: 15, colorscale: [[0,'#fef2f2'],[0.2,'#fecaca'],[0.4,'#f87171'],[0.6,'#ef4444'],[0.8,'#dc2626'],[1,'#7f1d1d']] },
@@ -1701,9 +2050,9 @@
 
     // UNFPA color palette
     const colors = {
-      teal: '#009EDB', darkTeal: '#0077A3', navy: '#003B5C',
-      light: '#4DB8E8', pale: '#B8E4F5',
-      accent1: '#00A8B5', accent2: '#6B8E9F', accent3: '#C75B39',
+      orange: '#F36F21', darkOrange: '#E05A0C', navy: '#2D2926',
+      light: '#FFA873', pale: '#FFD9C4',
+      accent1: '#FFB549', accent2: '#6B6B6B', accent3: '#D35400',
     };
 
     // Plotly config
@@ -1914,8 +2263,8 @@
         {
           x: trendYears, y: trendData.globalAbr,
           mode: 'lines+markers', name: 'Global ABR',
-          line: { color: colors.teal, width: 3 },
-          marker: { size: 8, color: colors.teal },
+          line: { color: colors.orange, width: 3 },
+          marker: { size: 8, color: colors.orange },
           hovertemplate: 'Global ABR: %{y} per 1,000<extra></extra>',
         },
         {
@@ -2031,8 +2380,8 @@
           offset: -0.22,
           width: 0.35,
           marker: {
-            color: 'rgba(2,128,144,0.75)',
-            line: { color: '#028090', width: 1.5 },
+            color: 'rgba(243,111,33,0.75)',
+            line: { color: '#F36F21', width: 1.5 },
             cornerradius: 3,
           },
           hovertemplate: '%{x}<br>ABR: %{y} per 1,000<extra></extra>',
@@ -2103,9 +2452,9 @@
         r: [country.abr/2, country.cpr, 100-country.unmet, (1-country.hiv/15)*100, country.sexEd, 100-country.childMarriage],
         theta: ['Birth Rate', 'Contraceptive Use', 'FP Met Need', 'HIV Free', 'Sex Ed', 'No Child Marriage'],
         fill: 'toself',
-        fillcolor: 'rgba(0,158,219,0.2)',
-        line: { color: colors.teal, width: 2 },
-        marker: { size: 6, color: colors.teal },
+        fillcolor: 'rgba(243,111,33,0.2)',
+        line: { color: colors.orange, width: 2 },
+        marker: { size: 6, color: colors.orange },
         name: country.name,
       };
       const radarLayout = {
@@ -2133,7 +2482,263 @@
       renderMap(getFilteredData());
     }
 
-    // ============ CAMPAIGNS CAROUSEL ============
+    // ============ 3D CAROUSEL ============
+    let carouselRotation = 0;
+    const carouselStep = 72; // 360 / 5 cards
+
+    function render3DCarousel() {
+      const track = document.getElementById('carousel3dTrack');
+      if (!track) return;
+
+      track.innerHTML = campaignData.map((campaign, i) => `
+        <div class="carousel-3d-card" onclick="openCampaignModal(${i})" style="transform: rotateY(${i * 72}deg) translateZ(400px);">
+          <div class="carousel-3d-card-img" style="background-image: url('${campaign.img}');">
+            <span class="carousel-3d-card-badge">Programme</span>
+          </div>
+          <div class="carousel-3d-card-body">
+            <h3>${campaign.title}</h3>
+            <p>${campaign.desc.substring(0, 100)}...</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function rotateCarousel(direction) {
+      const track = document.getElementById('carousel3dTrack');
+      if (!track) return;
+
+      carouselRotation += direction * carouselStep;
+      track.style.animation = 'none';
+      track.style.transform = `rotateY(${carouselRotation}deg)`;
+      track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+
+      // Resume auto-rotation after delay
+      setTimeout(() => {
+        track.style.animation = 'carouselRotate 30s linear infinite';
+        track.style.transform = '';
+        track.style.transition = '';
+      }, 3000);
+    }
+
+    // ============ FULL DASHBOARD ============
+    function openFullDashboard() {
+      document.getElementById('fullDashboardOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      renderSummaryGrid();
+      renderFullDashboardChart();
+    }
+
+    function closeFullDashboard() {
+      document.getElementById('fullDashboardOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function renderSummaryGrid() {
+      const grid = document.getElementById('summaryGrid');
+      if (!grid) return;
+
+      const regions = ['Africa', 'Asia', 'Americas', 'Europe', 'MENA'];
+      const regionStats = regions.map(r => {
+        const countries = uniqueData.filter(c => c.region === r);
+        const avgAbr = Math.round(countries.reduce((s, c) => s + c.abr, 0) / countries.length);
+        const avgCpr = Math.round(countries.reduce((s, c) => s + c.cpr, 0) / countries.length);
+        return { region: r, countries: countries.length, avgAbr, avgCpr };
+      });
+
+      grid.innerHTML = regionStats.map(r => `
+        <div class="summary-card">
+          <h3><i data-lucide="globe-2" style="width:20px;height:20px;color:var(--unfpa-orange);"></i> ${r.region}</h3>
+          <div class="summary-stat-row">
+            <span class="summary-stat-label">Countries</span>
+            <span class="summary-stat-value">${r.countries}</span>
+          </div>
+          <div class="summary-stat-row">
+            <span class="summary-stat-label">Avg Birth Rate</span>
+            <span class="summary-stat-value">${r.avgAbr} per 1,000</span>
+          </div>
+          <div class="summary-stat-row">
+            <span class="summary-stat-label">Avg Contraceptive Use</span>
+            <span class="summary-stat-value">${r.avgCpr}%</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Re-initialize icons
+      lucide.createIcons();
+    }
+
+    function renderFullDashboardChart() {
+      const chartEl = document.getElementById('fullDashboardChart');
+      if (!chartEl) return;
+
+      const traces = [
+        {
+          x: uniqueData.map(c => c.name),
+          y: uniqueData.map(c => c.abr),
+          name: 'Birth Rate',
+          type: 'scatter',
+          mode: 'lines',
+          line: { color: '#F36F21', width: 2 },
+          yaxis: 'y1'
+        },
+        {
+          x: uniqueData.map(c => c.name),
+          y: uniqueData.map(c => c.cpr),
+          name: 'Contraceptive Use',
+          type: 'scatter',
+          mode: 'lines',
+          line: { color: '#10b981', width: 2 },
+          yaxis: 'y2'
+        }
+      ];
+
+      const layout = {
+        title: { text: 'Global Indicators Comparison', font: { size: 18, color: '#2D2926' } },
+        xaxis: { tickfont: { size: 8 }, tickangle: -45 },
+        yaxis: { title: 'Birth Rate (per 1,000)', side: 'left', tickfont: { color: '#F36F21' } },
+        yaxis2: { title: 'Contraceptive Use (%)', side: 'right', overlaying: 'y', tickfont: { color: '#10b981' } },
+        height: 500,
+        showlegend: true,
+        legend: { orientation: 'h', y: 1.1 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'
+      };
+
+      Plotly.newPlot('fullDashboardChart', traces, layout, { responsive: true });
+    }
+
+    // ============ FULL DASHBOARD ============
+    function openFullDashboard() {
+      document.getElementById('fullDashboardOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      renderSummaryGrid();
+      setTimeout(renderFullDashboardChart, 100);
+    }
+
+    function closeFullDashboard() {
+      document.getElementById('fullDashboardOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function renderSummaryGrid() {
+      const grid = document.getElementById('summaryGrid');
+      if (!grid) return;
+
+      const regions = ['Africa', 'Asia', 'Americas', 'Europe', 'MENA'];
+      const regionStats = regions.map(r => {
+        const countries = uniqueData.filter(c => c.region === r);
+        const avgAbr = Math.round(countries.reduce((s, c) => s + c.abr, 0) / countries.length) || 0;
+        const avgCpr = Math.round(countries.reduce((s, c) => s + c.cpr, 0) / countries.length) || 0;
+        return { region: r, countries: countries.length, avgAbr, avgCpr };
+      });
+
+      grid.innerHTML = regionStats.map(r => `
+        <div class="summary-card">
+          <h3><i data-lucide="globe-2" style="width:20px;height:20px;color:var(--unfpa-orange);"></i> ${r.region}</h3>
+          <div class="summary-stat-row">
+            <span class="summary-stat-label">Countries</span>
+            <span class="summary-stat-value">${r.countries}</span>
+          </div>
+          <div class="summary-stat-row">
+            <span class="summary-stat-label">Avg Birth Rate</span>
+            <span class="summary-stat-value">${r.avgAbr} per 1,000</span>
+          </div>
+          <div class="summary-stat-row">
+            <span class="summary-stat-label">Avg Contraceptive Use</span>
+            <span class="summary-stat-value">${r.avgCpr}%</span>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function renderFullDashboardChart() {
+      const chartEl = document.getElementById('fullDashboardChart');
+      if (!chartEl) return;
+
+      const sortedData = [...uniqueData].sort((a, b) => b.abr - a.abr).slice(0, 30);
+
+      const traces = [
+        {
+          x: sortedData.map(c => c.name),
+          y: sortedData.map(c => c.abr),
+          name: 'Birth Rate',
+          type: 'bar',
+          marker: { color: '#F36F21' },
+          yaxis: 'y1'
+        },
+        {
+          x: sortedData.map(c => c.name),
+          y: sortedData.map(c => c.cpr),
+          name: 'Contraceptive Use',
+          type: 'scatter',
+          mode: 'lines+markers',
+          line: { color: '#10b981', width: 2 },
+          marker: { size: 6 },
+          yaxis: 'y2'
+        }
+      ];
+
+      const layout = {
+        title: { text: 'Top 30 Countries: Birth Rate vs Contraceptive Use', font: { size: 16, color: '#2D2926' } },
+        xaxis: { tickfont: { size: 9 }, tickangle: -45 },
+        yaxis: { title: 'Birth Rate (per 1,000)', side: 'left', tickfont: { color: '#F36F21' } },
+        yaxis2: { title: 'Contraceptive Use (%)', side: 'right', overlaying: 'y', range: [0, 100], tickfont: { color: '#10b981' } },
+        height: 500,
+        showlegend: true,
+        legend: { orientation: 'h', y: 1.1 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        margin: { b: 100 }
+      };
+
+      Plotly.newPlot('fullDashboardChart', traces, layout, { responsive: true });
+    }
+
+    // ============ ANIMATED STATS ============
+    function initAnimatedStats() {
+      const stats = [
+        { el: 'animStat1', target: 75, suffix: '' },
+        { el: 'animStat2', target: 40, suffix: '%' },
+        { el: 'animStat3', target: 15, suffix: 'M' },
+        { el: 'animStat4', target: 85, suffix: '%' }
+      ];
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            stats.forEach((s, i) => {
+              setTimeout(() => {
+                animateStat(document.getElementById(s.el), s.target, s.suffix);
+              }, i * 200);
+            });
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.5 });
+
+      const analysisSection = document.getElementById('analysis');
+      if (analysisSection) {
+        observer.observe(analysisSection);
+      }
+    }
+
+    function animateStat(element, target, suffix) {
+      if (!element) return;
+      let current = 0;
+      const increment = target / 40;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        element.textContent = Math.round(current) + suffix;
+      }, 25);
+    }
+
+// ============ CAMPAIGNS CAROUSEL ============
     const campaignData = [
       {
         title: "Comprehensive Sexuality Education",
@@ -2162,11 +2767,7 @@
       },
     ];
 
-    function scrollCampaigns(direction) {
-      const track = document.getElementById('campaignsTrack');
-      const cardWidth = 320; // card width + gap
-      track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
-    }
+    // Old carousel functions replaced by 3D carousel
 
     function openCampaignModal(index) {
       const data = campaignData[index];
@@ -2189,6 +2790,18 @@
         closeCountryPanel();
       }
     });
+
+    // ============ SCROLL TO CHART ============
+    function scrollToChart(metric) {
+      setMapMetric(metric);
+      barMetric = metric;
+      renderBarChart(getFilteredData());
+
+      const dashboard = document.getElementById('dashboard');
+      if (dashboard) {
+        dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
 
     // ============ EXPORT ============
     function exportChart(chartId, filename) {
@@ -2273,8 +2886,40 @@
         initScrollAnimations();
         updateDashboard();
         renderTrendChart();
+        render3DCarousel();
+        initAnimatedStats();
       }, 1800);
     });
+
+    // ============ ANIMATED STATS ============
+    function initAnimatedStats() {
+      const stats = [
+        { el: 'animStat1', target: 75, suffix: '' },
+        { el: 'animStat2', target: 40, suffix: '%' },
+        { el: 'animStat3', target: 15, suffix: 'M' },
+        { el: 'animStat4', target: 85, suffix: '%' }
+      ];
+
+      stats.forEach((s, i) => {
+        setTimeout(() => {
+          animateStat(document.getElementById(s.el), s.target, s.suffix);
+        }, i * 200);
+      });
+    }
+
+    function animateStat(element, target, suffix) {
+      if (!element) return;
+      let current = 0;
+      const increment = target / 50;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        element.textContent = Math.round(current) + suffix;
+      }, 30);
+    }
 
     // Resize handler
     window.addEventListener('resize', () => {
