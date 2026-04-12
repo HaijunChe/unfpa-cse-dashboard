@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Haijun Che · Data Visualization Portfolio</title>
   <style>
-    @page { size: A4; margin: 12mm; }
+    @page { size: A4; margin: 10mm; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; box-sizing: border-box; }
 
     body {
@@ -14,18 +14,18 @@
       color: #1a1a2e;
       margin: 0;
       padding: 0;
-      line-height: 1.5;
+      line-height: 1.4;
+      font-size: 10pt;
     }
 
     .page {
       width: 210mm;
       min-height: 297mm;
-      padding: 15mm;
+      padding: 12mm;
       margin: 0 auto;
       position: relative;
-      border-top: 4px solid #028090;
+      border-top: 3px solid #028090;
       page-break-after: always;
-      overflow: hidden;
     }
 
     .page:last-child {
@@ -33,123 +33,103 @@
     }
 
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 20px;
-    }
-
-    .header-info {
-      font-size: 10px;
-      color: #555555;
       text-align: right;
+      font-size: 9pt;
+      color: #555555;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e0e0e0;
     }
 
     .section-badge {
       display: inline-block;
       background: #028090;
       color: #ffffff;
-      font-size: 10px;
+      font-size: 8pt;
       font-weight: bold;
-      padding: 4px 12px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      letter-spacing: 0.5px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
     }
 
     .section-title {
       font-family: Georgia, serif;
-      font-size: 28px;
+      font-size: 20pt;
       font-weight: bold;
       color: #1a1a2e;
-      margin: 0 0 8px 0;
-      line-height: 1.2;
+      margin: 0 0 6px 0;
     }
 
     .subtitle {
-      font-size: 13px;
+      font-size: 10pt;
       color: #555555;
-      margin-bottom: 20px;
-    }
-
-    .image-row {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .image-container {
-      border: 1px solid #e0e0e0;
-      overflow: hidden;
-    }
-
-    .image-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .image-large {
-      width: 56%;
-      max-height: 320px;
-    }
-
-    .image-small {
-      width: 42%;
-      max-height: 320px;
-    }
-
-    .image-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .image-grid-item {
-      width: 48%;
-      max-height: 200px;
-      border: 1px solid #e0e0e0;
-      overflow: hidden;
-    }
-
-    .image-grid-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .image-caption {
-      font-size: 10px;
-      color: #555555;
-      text-align: center;
-      margin-top: 6px;
-      margin-bottom: 0;
-    }
-
-    .description-block {
-      border-left: 3px solid #028090;
-      padding-left: 12px;
       margin-bottom: 15px;
     }
 
-    .description-block p {
-      font-size: 12px;
-      color: #1a1a2e;
-      margin: 0;
-      line-height: 1.6;
+    /* Two column layout */
+    .two-column {
+      display: flex;
+      gap: 15px;
+    }
+
+    .column {
+      flex: 1;
+    }
+
+    .column-left {
+      flex: 1.1;
+    }
+
+    .column-right {
+      flex: 0.9;
+    }
+
+    /* Images - show full image */
+    .image-box {
+      border: 1px solid #e0e0e0;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+
+    .image-box img {
+      width: 100%;
+      height: auto;
+      max-height: 280px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .image-box.large img {
+      max-height: 320px;
+    }
+
+    .image-box.medium img {
+      max-height: 200px;
+    }
+
+    .image-box.small img {
+      max-height: 150px;
+    }
+
+    .image-caption {
+      font-size: 8pt;
+      color: #555555;
+      text-align: center;
+      padding: 5px;
+      background: #f5f5f5;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .description-block {
+      border-left: 2px solid #028090;
+      padding-left: 10px;
+      margin: 12px 0;
+      font-size: 9pt;
     }
 
     .links-section {
-      margin-bottom: 12px;
-    }
-
-    .links-section p {
-      font-size: 12px;
-      color: #1a1a2e;
-      margin: 4px 0;
+      font-size: 9pt;
+      margin: 10px 0;
     }
 
     .links-section a {
@@ -158,90 +138,93 @@
     }
 
     .tools-line {
-      font-size: 11px;
+      font-size: 8pt;
       color: #555555;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
-    .footer {
-      position: absolute;
-      bottom: 15mm;
-      left: 15mm;
-      right: 15mm;
-      text-align: center;
-      font-size: 10px;
-      color: #555555;
-    }
-
-    .robot-row {
+    /* Project 3 specific */
+    .robot-grid {
       display: flex;
-      gap: 12px;
-      margin-bottom: 15px;
-      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
     .robot-item {
-      width: 31%;
-      max-height: 150px;
+      flex: 1;
       border: 1px solid #e0e0e0;
-      overflow: hidden;
     }
 
     .robot-item img {
       width: 100%;
-      height: 100%;
+      height: auto;
+      max-height: 140px;
       object-fit: contain;
       display: block;
     }
 
+    /* QR Section */
     .qr-section {
       background: #f8f9fa;
       border: 1px solid #e0e0e0;
-      padding: 12px;
-      margin: 15px 0;
-      text-align: center;
+      padding: 10px;
+      margin: 12px 0;
     }
 
     .qr-title {
-      font-size: 12px;
+      font-size: 10pt;
       color: #028090;
       font-weight: bold;
+      text-align: center;
       margin-bottom: 8px;
     }
 
-    .qr-row {
+    .qr-grid {
       display: flex;
-      justify-content: center;
-      gap: 30px;
+      justify-content: space-around;
+      gap: 15px;
     }
 
     .qr-item {
       text-align: center;
+      flex: 1;
     }
 
     .qr-item img {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       border: 1px solid #e0e0e0;
     }
 
     .qr-label {
-      font-size: 9px;
+      font-size: 7pt;
       color: #555555;
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
     .qr-link {
-      font-size: 9px;
+      font-size: 6pt;
       color: #028090;
       word-break: break-all;
-      margin-top: 4px;
+      margin-top: 2px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10mm;
+      left: 12mm;
+      right: 12mm;
+      text-align: center;
+      font-size: 8pt;
+      color: #555555;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 8px;
     }
 
     @media screen {
       .page {
-        margin: 20px auto;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        margin: 15px auto;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
       }
     }
 
@@ -256,33 +239,39 @@
   <!-- PAGE 1 — SRHR Dashboard -->
   <div class="page">
     <div class="header">
-      <div></div>
-      <div class="header-info">Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet</div>
+      Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet
     </div>
 
     <div class="section-badge">PROJECT 01</div>
     <h1 class="section-title">UNFPA SRHR Interactive Dashboard</h1>
     <p class="subtitle">Built as a demonstration for UNFPA CSE Programme application</p>
 
-    <div class="image-row">
-      <div class="image-container image-large">
-        <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/srhr_dashboard_full.png" alt="Full-page SRHR Dashboard Overview">
+    <!-- Two column layout for Project 1 -->
+    <div class="two-column">
+      <div class="column-left">
+        <div class="image-box large">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/srhr_dashboard_full.png" alt="Full-page SRHR Dashboard Overview">
+        </div>
+        <div class="image-caption">Full-page Dashboard Overview</div>
       </div>
-      <div class="image-container image-small">
-        <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/srhr_complete_data_overview.png" alt="Complete Data Overview Panel">
+      <div class="column-right">
+        <div class="image-box large">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/srhr_complete_data_overview.png" alt="Complete Data Overview Panel">
+        </div>
+        <div class="image-caption">Country Detail Panel with Radar Chart</div>
+
+        <div class="description-block" style="margin-top: 15px;">
+          <p>Interactive dashboard covering adolescent birth rates, contraceptive prevalence, HIV trends, sex education coverage, and child marriage across 75 countries. Built with Python data pipeline. Data from WHO, UNFPA, UNAIDS, and World Bank.</p>
+        </div>
+
+        <div class="links-section">
+          <p>🔗 <a href="https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html">Live Demo</a></p>
+          <p>💻 <a href="https://github.com/HaijunChe/unfpa-cse-dashboard">Source Code</a></p>
+        </div>
+
+        <p class="tools-line">Python · pandas · Plotly.js · HTML/CSS · GitHub Pages</p>
       </div>
     </div>
-
-    <div class="description-block">
-      <p>Interactive dashboard covering adolescent birth rates, contraceptive prevalence, HIV trends, sex education coverage, and child marriage across 75 countries. Built with a Python data pipeline and deployed as a single-page web application. Data from WHO, UNFPA, UNAIDS, and World Bank.</p>
-    </div>
-
-    <div class="links-section">
-      <p>🔗 Live Demo: <a href="https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html">https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html</a></p>
-      <p>💻 Source Code: <a href="https://github.com/HaijunChe/unfpa-cse-dashboard">https://github.com/HaijunChe/unfpa-cse-dashboard</a></p>
-    </div>
-
-    <p class="tools-line">Python · pandas · plotly · Plotly.js · HTML/CSS · GitHub Pages · Claude Code (AI-assisted)</p>
 
     <div class="footer">Haijun Che · haijunche1376@gmail.com · Portfolio 2026 · Not an official UNFPA publication</div>
   </div>
@@ -290,43 +279,41 @@
   <!-- PAGE 2 — AQI Dashboard -->
   <div class="page">
     <div class="header">
-      <div></div>
-      <div class="header-info">Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet</div>
+      Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet
     </div>
 
     <div class="section-badge">PROJECT 02</div>
     <h1 class="section-title">Air Quality & Health Risk Monitoring</h1>
     <p class="subtitle">Identifying non-obvious environmental signals as health risk indicators for data-scarce populations</p>
 
-    <div class="image-grid">
-      <div>
-        <div class="image-grid-item">
+    <!-- Two column layout for Project 2 -->
+    <div class="two-column">
+      <div class="column">
+        <div class="image-box medium">
           <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_seasonal_analysis.png" alt="Seasonal Analysis">
         </div>
-        <p class="image-caption">Seasonal Pattern Analysis</p>
-      </div>
-      <div>
-        <div class="image-grid-item">
-          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_time_series_optimal_lag.png" alt="Time Series Optimal Lag">
-        </div>
-        <p class="image-caption">Predictive Lag Analysis (3-week lead)</p>
-      </div>
-      <div>
-        <div class="image-grid-item">
+        <div class="image-caption">Seasonal Pattern Analysis</div>
+
+        <div class="image-box medium">
           <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_comprehensive_dashboard.png" alt="Comprehensive Dashboard">
         </div>
-        <p class="image-caption">Comprehensive Environment-ILI Correlation</p>
+        <div class="image-caption">Comprehensive Environment-ILI Correlation</div>
       </div>
-      <div>
-        <div class="image-grid-item">
+      <div class="column">
+        <div class="image-box medium">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_time_series_optimal_lag.png" alt="Time Series Optimal Lag">
+        </div>
+        <div class="image-caption">Predictive Lag Analysis (3-week lead)</div>
+
+        <div class="image-box medium">
           <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_residual_analysis.png" alt="Residual Analysis">
         </div>
-        <p class="image-caption">Model Residual Analysis</p>
+        <div class="image-caption">Model Residual Analysis</div>
       </div>
     </div>
 
-    <div class="description-block">
-      <p>This project tracks air quality and meteorological data as early signals for influenza-like illness (ILI) outbreaks in Karachi, a city with limited health surveillance infrastructure. The key finding: temperature and NO₂ levels predict ILI cases with a 3-week lead time (r=-0.419, p=0.0001). This kind of cross-indicator analysis — finding non-obvious linkages that standard reporting would miss — is directly transferable to CSE programme monitoring data.</p>
+    <div class="description-block" style="margin-top: 15px;">
+      <p>This project tracks air quality and meteorological data as early signals for influenza-like illness (ILI) outbreaks in Karachi. Key finding: temperature and NO₂ levels predict ILI cases with a 3-week lead time (r=-0.419, p=0.0001). This cross-indicator analysis is directly transferable to CSE programme monitoring data.</p>
     </div>
 
     <p class="tools-line">Python · pandas · matplotlib · scikit-learn · Gradient Boosting · XGBoost · R</p>
@@ -337,53 +324,47 @@
   <!-- PAGE 3 — Robotics Project -->
   <div class="page">
     <div class="header">
-      <div></div>
-      <div class="header-info">Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet</div>
+      Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet
     </div>
 
     <div class="section-badge">PROJECT 03</div>
     <h1 class="section-title">AI Robotics for Disaster Relief</h1>
     <p class="subtitle">Safe motion planning for robotic arms in post-disaster rescue scenarios · Tsinghua University AI & Robot Lab</p>
 
-    <div class="robot-row">
-      <div>
-        <div class="robot-item">
-          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_1.png" alt="HER Framework">
-        </div>
-        <p class="image-caption">HER Framework: sparse reward learning</p>
+    <!-- Robot Images - Larger and full display -->
+    <div class="robot-grid">
+      <div class="robot-item">
+        <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_1.png" alt="HER Framework">
+        <div class="image-caption">HER Framework: sparse reward learning</div>
       </div>
-      <div>
-        <div class="robot-item">
-          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_2.png" alt="AC-DDPG">
-        </div>
-        <p class="image-caption">AC-DDPG: actor-critic obstacle planning</p>
+      <div class="robot-item">
+        <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_2.png" alt="AC-DDPG">
+        <div class="image-caption">AC-DDPG: actor-critic planning</div>
       </div>
-      <div>
-        <div class="robot-item">
-          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_3.png" alt="Results">
-        </div>
-        <p class="image-caption">Results: 90%+ success rate across scenarios</p>
+      <div class="robot-item">
+        <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_3.png" alt="Results">
+        <div class="image-caption">Results: 90%+ success rate</div>
       </div>
     </div>
 
-    <!-- QR Code Section for Animated Demos -->
+    <!-- QR Codes with Links -->
     <div class="qr-section">
-      <div class="qr-title">📱 Scan to View Animated Demonstrations</div>
-      <div class="qr-row">
+      <div class="qr-title">📱 Scan QR Code or Click Link to View Animated Demonstrations</div>
+      <div class="qr-grid">
         <div class="qr-item">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_0.gif" alt="Static Obstacle QR">
-          <div class="qr-label">Static Obstacle Avoidance</div>
-          <div class="qr-link">anim_0.gif</div>
+          <div class="qr-label">Static Obstacle</div>
+          <div class="qr-link"><a href="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_0.gif">View Animation →</a></div>
         </div>
         <div class="qr-item">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_1.gif" alt="Periodic Dynamic QR">
-          <div class="qr-label">Periodic Dynamic Obstacles</div>
-          <div class="qr-link">anim_1.gif</div>
+          <div class="qr-label">Periodic Dynamic</div>
+          <div class="qr-link"><a href="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_1.gif">View Animation →</a></div>
         </div>
         <div class="qr-item">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_2.gif" alt="One-time Dynamic QR">
-          <div class="qr-label">One-time Dynamic Obstacle</div>
-          <div class="qr-link">anim_2.gif</div>
+          <div class="qr-label">One-time Dynamic</div>
+          <div class="qr-link"><a href="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_2.gif">View Animation →</a></div>
         </div>
       </div>
     </div>
