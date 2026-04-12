@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haijun Che · Data Visualization Portfolio</title>
+  <style>
+    @page { size: A4; margin: 12mm; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; box-sizing: border-box; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #1a1a2e;
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 15mm;
+      margin: 0 auto;
+      position: relative;
+      border-top: 4px solid #028090;
+      page-break-after: always;
+      overflow: hidden;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .header-info {
+      font-size: 10px;
+      color: #555555;
+      text-align: right;
+    }
+
+    .section-badge {
+      display: inline-block;
+      background: #028090;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .section-title {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      font-weight: bold;
+      color: #1a1a2e;
+      margin: 0 0 8px 0;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #555555;
+      margin-bottom: 20px;
+    }
+
+    .image-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .image-container {
+      border: 1px solid #e0e0e0;
+      overflow: hidden;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-large {
+      width: 56%;
+      max-height: 320px;
+    }
+
+    .image-small {
+      width: 42%;
+      max-height: 320px;
+    }
+
+    .image-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .image-grid-item {
+      width: 48%;
+      max-height: 200px;
+      border: 1px solid #e0e0e0;
+      overflow: hidden;
+    }
+
+    .image-grid-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-caption {
+      font-size: 10px;
+      color: #555555;
+      text-align: center;
+      margin-top: 6px;
+      margin-bottom: 0;
+    }
+
+    .description-block {
+      border-left: 3px solid #028090;
+      padding-left: 12px;
+      margin-bottom: 15px;
+    }
+
+    .description-block p {
+      font-size: 12px;
+      color: #1a1a2e;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .links-section {
+      margin-bottom: 12px;
+    }
+
+    .links-section p {
+      font-size: 12px;
+      color: #1a1a2e;
+      margin: 4px 0;
+    }
+
+    .links-section a {
+      color: #028090;
+      text-decoration: none;
+    }
+
+    .tools-line {
+      font-size: 11px;
+      color: #555555;
+      margin-top: 12px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 15mm;
+      left: 15mm;
+      right: 15mm;
+      text-align: center;
+      font-size: 10px;
+      color: #555555;
+    }
+
+    .robot-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 15px;
+      justify-content: space-between;
+    }
+
+    .robot-item {
+      width: 31%;
+      max-height: 150px;
+      border: 1px solid #e0e0e0;
+      overflow: hidden;
+    }
+
+    .robot-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .qr-section {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      padding: 12px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .qr-title {
+      font-size: 12px;
+      color: #028090;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .qr-row {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .qr-item {
+      text-align: center;
+    }
+
+    .qr-item img {
+      width: 80px;
+      height: 80px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .qr-label {
+      font-size: 9px;
+      color: #555555;
+      margin-top: 4px;
+    }
+
+    .qr-link {
+      font-size: 9px;
+      color: #028090;
+      word-break: break-all;
+      margin-top: 4px;
+    }
+
+    @media screen {
+      .page {
+        margin: 20px auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+    }
+
+    @media print {
+      body { background: white; }
+      .page { box-shadow: none; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE 1 — SRHR Dashboard -->
+  <div class="page">
+    <div class="header">
+      <div></div>
+      <div class="header-info">Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet</div>
+    </div>
+
+    <div class="section-badge">PROJECT 01</div>
+    <h1 class="section-title">UNFPA SRHR Interactive Dashboard</h1>
+    <p class="subtitle">Built as a demonstration for UNFPA CSE Programme application</p>
+
+    <div class="image-row">
+      <div class="image-container image-large">
+        <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/srhr_dashboard_full.png" alt="Full-page SRHR Dashboard Overview">
+      </div>
+      <div class="image-container image-small">
+        <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/srhr_complete_data_overview.png" alt="Complete Data Overview Panel">
+      </div>
+    </div>
+
+    <div class="description-block">
+      <p>Interactive dashboard covering adolescent birth rates, contraceptive prevalence, HIV trends, sex education coverage, and child marriage across 75 countries. Built with a Python data pipeline and deployed as a single-page web application. Data from WHO, UNFPA, UNAIDS, and World Bank.</p>
+    </div>
+
+    <div class="links-section">
+      <p>🔗 Live Demo: <a href="https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html">https://haijunche.github.io/unfpa-cse-dashboard/dashboard.html</a></p>
+      <p>💻 Source Code: <a href="https://github.com/HaijunChe/unfpa-cse-dashboard">https://github.com/HaijunChe/unfpa-cse-dashboard</a></p>
+    </div>
+
+    <p class="tools-line">Python · pandas · plotly · Plotly.js · HTML/CSS · GitHub Pages · Claude Code (AI-assisted)</p>
+
+    <div class="footer">Haijun Che · haijunche1376@gmail.com · Portfolio 2026 · Not an official UNFPA publication</div>
+  </div>
+
+  <!-- PAGE 2 — AQI Dashboard -->
+  <div class="page">
+    <div class="header">
+      <div></div>
+      <div class="header-info">Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet</div>
+    </div>
+
+    <div class="section-badge">PROJECT 02</div>
+    <h1 class="section-title">Air Quality & Health Risk Monitoring</h1>
+    <p class="subtitle">Identifying non-obvious environmental signals as health risk indicators for data-scarce populations</p>
+
+    <div class="image-grid">
+      <div>
+        <div class="image-grid-item">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_seasonal_analysis.png" alt="Seasonal Analysis">
+        </div>
+        <p class="image-caption">Seasonal Pattern Analysis</p>
+      </div>
+      <div>
+        <div class="image-grid-item">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_time_series_optimal_lag.png" alt="Time Series Optimal Lag">
+        </div>
+        <p class="image-caption">Predictive Lag Analysis (3-week lead)</p>
+      </div>
+      <div>
+        <div class="image-grid-item">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_comprehensive_dashboard.png" alt="Comprehensive Dashboard">
+        </div>
+        <p class="image-caption">Comprehensive Environment-ILI Correlation</p>
+      </div>
+      <div>
+        <div class="image-grid-item">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/aqi_residual_analysis.png" alt="Residual Analysis">
+        </div>
+        <p class="image-caption">Model Residual Analysis</p>
+      </div>
+    </div>
+
+    <div class="description-block">
+      <p>This project tracks air quality and meteorological data as early signals for influenza-like illness (ILI) outbreaks in Karachi, a city with limited health surveillance infrastructure. The key finding: temperature and NO₂ levels predict ILI cases with a 3-week lead time (r=-0.419, p=0.0001). This kind of cross-indicator analysis — finding non-obvious linkages that standard reporting would miss — is directly transferable to CSE programme monitoring data.</p>
+    </div>
+
+    <p class="tools-line">Python · pandas · matplotlib · scikit-learn · Gradient Boosting · XGBoost · R</p>
+
+    <div class="footer">Haijun Che · haijunche1376@gmail.com · Portfolio 2026 · Not an official UNFPA publication</div>
+  </div>
+
+  <!-- PAGE 3 — Robotics Project -->
+  <div class="page">
+    <div class="header">
+      <div></div>
+      <div class="header-info">Haijun Che · Data Visualization Portfolio · Erasmus Mundus MPH, Karolinska Institutet</div>
+    </div>
+
+    <div class="section-badge">PROJECT 03</div>
+    <h1 class="section-title">AI Robotics for Disaster Relief</h1>
+    <p class="subtitle">Safe motion planning for robotic arms in post-disaster rescue scenarios · Tsinghua University AI & Robot Lab</p>
+
+    <div class="robot-row">
+      <div>
+        <div class="robot-item">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_1.png" alt="HER Framework">
+        </div>
+        <p class="image-caption">HER Framework: sparse reward learning</p>
+      </div>
+      <div>
+        <div class="robot-item">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_2.png" alt="AC-DDPG">
+        </div>
+        <p class="image-caption">AC-DDPG: actor-critic obstacle planning</p>
+      </div>
+      <div>
+        <div class="robot-item">
+          <img src="https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/Robot_obstacle_avoidance_3.png" alt="Results">
+        </div>
+        <p class="image-caption">Results: 90%+ success rate across scenarios</p>
+      </div>
+    </div>
+
+    <!-- QR Code Section for Animated Demos -->
+    <div class="qr-section">
+      <div class="qr-title">📱 Scan to View Animated Demonstrations</div>
+      <div class="qr-row">
+        <div class="qr-item">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_0.gif" alt="Static Obstacle QR">
+          <div class="qr-label">Static Obstacle Avoidance</div>
+          <div class="qr-link">anim_0.gif</div>
+        </div>
+        <div class="qr-item">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_1.gif" alt="Periodic Dynamic QR">
+          <div class="qr-label">Periodic Dynamic Obstacles</div>
+          <div class="qr-link">anim_1.gif</div>
+        </div>
+        <div class="qr-item">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://raw.githubusercontent.com/HaijunChe/unfpa-cse-dashboard/main/robotics/anim_2.gif" alt="One-time Dynamic QR">
+          <div class="qr-label">One-time Dynamic Obstacle</div>
+          <div class="qr-link">anim_2.gif</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="description-block">
+      <p>Goal-conditioned reinforcement learning framework (AC-DDPG + Hindsight Experience Replay) for robotic arm planning in unpredictable disaster-relief environments. Validated across static and dynamic obstacle scenarios. Achieved 90%+ task success rate with stable convergence. The core challenge — building a system that stays robust when conditions are unpredictable — mirrors the analytical mindset needed for complex humanitarian programme data.</p>
+    </div>
+
+    <p class="tools-line">Python · PyTorch · MuJoCo · AC-DDPG · HER · Goal-Conditioned RL</p>
+
+    <div class="footer">Haijun Che · haijunche1376@gmail.com · Portfolio 2026 · Not an official UNFPA publication</div>
+  </div>
+
+</body>
+</html>
